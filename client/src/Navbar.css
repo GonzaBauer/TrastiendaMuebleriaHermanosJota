@@ -1,0 +1,120 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(160, 82, 45, 0.2);
+  background-color: var(--color-alabastro);
+}
+
+.navbar__logo {
+  max-width: calc(100% - 60px);
+  color: var(--color-siena);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.navbar__links {
+  display: none;
+}
+
+.navbar__links--open {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 100%;
+  padding: 0.5rem 1rem 1rem;
+  border-bottom: 1px solid rgba(160, 82, 45, 0.2);
+  background-color: var(--color-alabastro);
+  box-shadow: var(--shadow-md);
+}
+
+.navbar__links a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+.navbar__links a:hover,
+.navbar__links a:focus-visible {
+  color: var(--color-siena);
+}
+
+.navbar__links a:focus-visible,
+.navbar__logo:focus-visible,
+.navbar__toggle:focus-visible {
+  outline: 2px solid var(--color-siena);
+  outline-offset: 3px;
+}
+
+.navbar__toggle {
+  display: flex;
+  flex: 0 0 44px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(160, 82, 45, 0.35);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.navbar__toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-siena);
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .navbar__links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .navbar__links a {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  .navbar__toggle {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar__links {
+    gap: 2rem;
+  }
+}

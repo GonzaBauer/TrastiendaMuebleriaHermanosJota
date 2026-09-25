@@ -1,0 +1,11 @@
+.home-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 100svh;
+}
+
+.home-view main {
+  min-width: 0;
+}
