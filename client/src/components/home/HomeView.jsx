@@ -2,7 +2,6 @@ import Navbar from '../../Navbar.jsx'
 import Footer from '../../Footer.jsx'
 import FeaturedProducts from './FeaturedProducts.jsx'
 import Hero from './Hero.jsx'
-import './HomeView.css'
 
 const featuredProducts = [
   {
@@ -21,9 +20,9 @@ const featuredProducts = [
 
 function HomeView() {
   return (
-    <div className="home-view">
+    <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
       <Navbar />
-      <main>
+      <main className="min-w-0">
         <Hero imageUrl="/images/imagen-hero-banner.png" />
         <FeaturedProducts products={featuredProducts} />
       </main>
