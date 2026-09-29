@@ -1,8 +1,3 @@
-//import express from "express"; 
-//import cors from "cors";
-//import productosRoutes from "./routes/productosRoutes.js";
-//import logger from "./middlewares/logger.js";
-
 const express = require("express");
 const cors = require("cors");
 const logger = require('./middlewares/logger.js');
