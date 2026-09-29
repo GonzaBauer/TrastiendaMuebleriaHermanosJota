@@ -1,16 +1,21 @@
-import express from "express";
-import cors from "cors";
-import productosRoutes from "./routes/productosRoutes.js";
-import logger from "./middlewares/logger.js";
+//import express from "express"; 
+//import cors from "cors";
+//import productosRoutes from "./routes/productosRoutes.js";
+//import logger from "./middlewares/logger.js";
+
+const express = require("express");
+const cors = require("cors");
+const logger = require('./middlewares/logger.js');
+const productoRoutes = require("./routes/productoRoutes.js");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-
-app.use(logger); // Lo aplicamos globalmente. Se ejecutará para CADA petición.
-app.use(cors());
 app.use(express.json());
-app.use("/api/productos", productosRoutes);
+app.use(logger);
+app.use(cors());
+
+app.use("/api/productos", productoRoutes);
 
 
 app.get("/", (_req, res) => {

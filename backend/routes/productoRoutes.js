@@ -1,7 +1,9 @@
-import { Router } from "express";
-import productos from "../productos.js";
+//import { Router } from "express";
+//import productos from "../productos.js";
+const express = require("express");
+const productos = require("../productos.js");
 
-const router = Router();
+const router = express.Router();
 
 router.get("/", (_req, res) => {
   res.json(productos);
@@ -27,4 +29,5 @@ router.post("/", (req, res) => {
   res.status(201).json(nuevoProducto);
 });
 
-export default router;
+//export default router;
+module.exports = router;
