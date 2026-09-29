@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const productos = require("../data/productos");
 
-router.get( "/api/productos", (req,res) => {
+router.get( "/", (req,res) => {
     res.json(productos);
 
 });
@@ -16,3 +17,5 @@ router.get("/:id", (req,res) => {
     }
 
 });
+
+module.exports = router;
