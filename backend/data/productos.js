@@ -3,8 +3,9 @@ const productos = [
         id: 1,
         nombre: "Sillón Copacabana",
         categoria: "Sala",
+        destacado: true,
         precio: 148000,
-        imagen: "../imagenes/sillon-copacabana.png",
+        imagen: "/imagenes/sillon-copacabana.png",
         descripcion:
         "Un refugio íntimo en madera de nogal y lino texturizado, pensado para reuniones largas y conversaciones pausadas.",
         descripcionLarga:
@@ -19,8 +20,9 @@ const productos = [
         id: 2,
         nombre: "Mesa de Centro Araucaria",
         categoria: "Mesa",
+        destacado: true,
         precio: 98000,
-        imagen: "../imagenes/mesa-centro-araucaria.png",
+        imagen: "/imagenes/mesa-centro-araucaria.png",
         descripcion:
         "Forma redonda, equilibrio visual y detalles tallados a mano para acompañar la vida cotidiana con un aire sereno.",
         descripcionLarga:
@@ -35,8 +37,9 @@ const productos = [
         id: 3,
         nombre: "Aparador Uspallata",
         categoria: "Almacenamiento",
+        destacado: true,
         precio: 214000,
-        imagen: "./imagenes/aparador-uspallata.png",
+        imagen: "/imagenes/aparador-uspallata.png",
         descripcion:
         "Solidez y proporciones generosas con un acabado cálido que despierta la belleza de lo artesanal.",
         descripcionLarga:
@@ -52,7 +55,7 @@ const productos = [
         nombre: "Biblioteca Recoleta",
         categoria: "Almacenamiento",
         precio: 236000,
-        imagen: "../imagenes/biblioteca-recoleta.png",
+        imagen: "/imagenes/biblioteca-recoleta.png",
         descripcion:
         "Estanterías abiertas con un gesto clásico y funcionalidad presente, ideales para libros, objetos y jardines interiores.",
         descripcionLarga:
@@ -68,7 +71,7 @@ const productos = [
         nombre: "Butaca Mendoza",
         categoria: "Sala",
         precio: 122000,
-        imagen: "../imagenes/butaca-mendoza.png",
+        imagen: "/imagenes/butaca-mendoza.png",
         descripcion:
         "Una butaca de respaldo curvo, asiento cómodo y líneas suaves que aportan carácter a cualquier rincón.",
         descripcionLarga:
@@ -84,7 +87,7 @@ const productos = [
         nombre: "Escritorio Costa",
         categoria: "Trabajo",
         precio: 174000,
-        imagen: "../imagenes/escritorio-costa.png",
+        imagen: "/imagenes/escritorio-costa.png",
         descripcion:
         "Espacio de trabajo pensado para la creatividad con materiales durables y una presencia serena y moderna.",
         medidas: "120 × 60 × 75 cm",
@@ -100,7 +103,7 @@ const productos = [
         nombre: "Mesa de Comedor Pampa",
         categoria: "Mesa",
         precio: 268000,
-        imagen: "../imagenes/mesa-comedor-pampa.png",
+        imagen: "/imagenes/mesa-comedor-pampa.png",
         descripcion:
         "Una mesa de comedor de proporciones cálidas que invita a la reunión, el ritual de la comida y la conversación.",
         descripcionLarga:
@@ -116,7 +119,7 @@ const productos = [
         nombre: "Mesa de Noche Aconcagua",
         categoria: "Dormitorio",
         precio: 76000,
-        imagen: "../imagenes/mesa-noche-aconcagua.png",
+        imagen: "/imagenes/mesa-noche-aconcagua.png",
         descripcion:
         "Diseño discreto y maduro, con un frente de almacenamiento sobrio y una silueta que se adapta a cualquier espacio.",
         descripcionLarga:
@@ -132,7 +135,7 @@ const productos = [
         nombre: "Silla de Trabajo Belgrano",
         categoria: "Trabajo",
         precio: 91000,
-        imagen: "../imagenes/silla-trabajo-belgrano.png",
+        imagen: "/imagenes/silla-trabajo-belgrano.png",
         descripcion:
         "Ergonomía y materiales nobles para un asiento que acompaña horas de trabajo con presencia y confort.",
         descripcionLarga:
@@ -148,7 +151,7 @@ const productos = [
         nombre: "Sillas Córdoba",
         categoria: "Comedor",
         precio: 142000,
-        imagen: "../imagenes/sillas-cordoba.png",
+        imagen: "/imagenes/sillas-cordoba.png",
         descripcion:
         "Un juego de sillas con un equilibrio perfecto entre tradición y contemporaneidad, pensadas para compartir.",
         descripcionLarga:
@@ -164,7 +167,7 @@ const productos = [
         nombre: "Sofá Patagonia",
         categoria: "Sala",
         precio: 315000,
-        imagen: "../imagenes/sofa-patagonia.png",
+        imagen: "/imagenes/sofa-patagonia.png",
         descripcion:
         "Sofá de estructura sólida y líneas envolventes, ideal para crear un hogar con una calidez genuina.",
         descripcionLarga:

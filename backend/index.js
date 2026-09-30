@@ -1,14 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const logger = require('./middlewares/logger.js');
-const productoRoutes = require("./routes/productoRoutes.js");
+const path = require("path");   
+const productoRoutes = require("./routes/productoRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(logger);
 app.use(cors());
+app.use(express.json());
+app.use("/imagenes", express.static(path.join(__dirname, "imagenes")));
 
 app.use("/api/productos", productoRoutes);
 

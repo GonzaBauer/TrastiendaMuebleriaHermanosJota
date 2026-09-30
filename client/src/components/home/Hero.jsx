@@ -33,4 +33,4 @@ function Hero({ imageUrl = '/images/imagen-hero-banner.png' }) {
   )
 }
 
-export default Hero
+export default Hero;
