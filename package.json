@@ -5,14 +5,14 @@
   "description": "Monorepo MERN de Trastienda Mueblería Hermanos Jota",
   "workspaces": [
     "backend",
-    "frontend"
+    "client"
   ],
   "scripts": {
-    "dev": "concurrently -n backend,frontend -c cyan,magenta \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "dev": "concurrently -n backend,client -c cyan,magenta \"npm run dev --workspace backend\" \"npm run dev --workspace client\"",
     "dev:backend": "npm run dev --workspace backend",
-    "dev:frontend": "npm run dev --workspace frontend",
+    "dev:client": "npm run dev --workspace client",
     "start": "npm run start --workspace backend",
-    "build": "npm run build --workspace frontend"
+    "build": "npm run build --workspace client"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
