@@ -1,25 +1,34 @@
 const express = require("express");
+const productos = require("../data/productos.js");
+
 const router = express.Router();
-const productos = require("../data/productos");
 
-router.get( "/", (req,res) => {
-    res.json(productos);
-
+router.get("/", (_req, res) => {
+  res.json(productos);
 });
 
 router.get("/destacados", (req, res) => {
     res.json(productos.filter(p => p.destacado));
 });
 
-router.get("/:id", (req,res) => {
-    const productoId = parseInt(req.params.id);
-    const producto = productos.find(p => p.id === productoId);
-    if (producto) {
-        res.json(producto);
-    } else {
-        res.status(404).json({ error: "Producto no encontrado" });
-    }
+router.get("/:id", (req, res, next) => {
+  const productoId = parseInt(req.params.id, 10);
+  const producto = productos.find((p) => p.id === productoId);
 
+  if (producto) {
+    res.json(producto);
+  } else {
+    const error = new Error("Producto no encontrado");
+    error.status = 404;
+    next(error);
+  }
+});
+
+router.post("/", (req, res) => {
+  const nuevoProducto = req.body;
+  nuevoProducto.id = productos.length + 1;
+  productos.push(nuevoProducto);
+  res.status(201).json(nuevoProducto);
 });
 
 module.exports = router;
