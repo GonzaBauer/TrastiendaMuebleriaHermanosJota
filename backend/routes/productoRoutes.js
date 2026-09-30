@@ -7,6 +7,10 @@ router.get( "/", (req,res) => {
 
 });
 
+router.get("/destacados", (req, res) => {
+    res.json(productos.filter(p => p.destacado));
+});
+
 router.get("/:id", (req,res) => {
     const productoId = parseInt(req.params.id);
     const producto = productos.find(p => p.id === productoId);
