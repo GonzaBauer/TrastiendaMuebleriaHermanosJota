@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom'
 import HomeView from './components/home/HomeView.jsx'
 import CatalogoView from './components/catalogo/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
@@ -8,7 +8,6 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:300
 
 function ProductDetailRoute({ selectedProduct, setSelectedProduct }) {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [result, setResult] = useState(null)
 
   useEffect(() => {
@@ -40,7 +39,6 @@ function ProductDetailRoute({ selectedProduct, setSelectedProduct }) {
 
   function handleBack() {
     setSelectedProduct(null)
-    navigate('/productos')
   }
 
   if (error) {

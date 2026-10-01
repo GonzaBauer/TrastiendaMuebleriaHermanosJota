@@ -10,7 +10,7 @@ function Hero({ imageUrl = '/images/imagen-hero-banner.png' }) {
           Creamos muebles únicos, pensados para convertirse en tu próxima
           herencia <span className="font-medium text-siena underline decoration-1 underline-offset-[0.15em]">familiar</span>
         </p>
-        <a className="inline-flex min-h-[48px] max-w-full items-center justify-center gap-2 rounded-full bg-siena px-5 py-3.5 text-center font-brand-sans text-xs font-semibold uppercase leading-[1.4] tracking-[0.08em] text-alabastro no-underline transition-all duration-300 ease-[ease] hover:bg-[#8B4726] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-vara md:px-7 md:py-4 md:text-[0.8rem]" href="catalogo">
+        <a className="inline-flex min-h-[48px] max-w-full items-center justify-center gap-2 rounded-full bg-siena px-5 py-3.5 text-center font-brand-sans text-xs font-semibold uppercase leading-[1.4] tracking-[0.08em] text-alabastro no-underline transition-all duration-300 ease-[ease] hover:bg-[#8B4726] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-vara md:px-7 md:py-4 md:text-[0.8rem]" href="/productos">
           Explorar Nuestra Colección <span aria-hidden="true">→</span>
         </a>
         <ul className="mt-5 mb-0 flex list-none flex-wrap gap-2.5 p-0 md:mt-6 md:gap-3" aria-label="Nuestros valores">
