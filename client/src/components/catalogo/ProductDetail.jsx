@@ -62,12 +62,12 @@ function ProductDetail({ product, onBack }) {
             CATÁLOGO
           </Link>
           <span aria-hidden="true" className="text-gray-400">/</span>
-          <span aria-current="page" className="font-semibold text-gray-800">DETALLE</span>
+          <span aria-current="page" className="font-semibold text-gray-800">{name}</span>
         </nav>
         <div className="max-w-6xl mx-auto bg-white/50 rounded-3xl p-6 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-[#eaddcf] rounded-2xl p-6 flex items-center justify-center min-h-[300px]">
-              <img src={image} alt={name} className="w-4/5 object-contain drop-shadow-xl" />
+              <img src={image} alt={name} loading="lazy" className="w-4/5 max-h-[420px] object-contain drop-shadow-xl" />
             </div>
             <div className="flex flex-col space-y-3 py-2">
               <span className="text-xs uppercase text-[#4a5d4e] font-semibold tracking-wider">
@@ -76,25 +76,31 @@ function ProductDetail({ product, onBack }) {
               <h1 className="text-4xl font-serif text-[#8c4e32] uppercase leading-tight">
                 {name}
               </h1>
-              <p className="text-sm text-gray-600 leading-snug">
+              <p className="text-base text-gray-600 leading-relaxed">
                 {product.descripcionLarga || product.description || product.descripcion}
               </p>
-              <hr className="border-gray-200 my-2" />
-              <dl>
-                {specifications.map(([key, value]) => (
-                  <div key={key} className="flex justify-between py-1.5 border-b border-gray-100 last:border-0 text-sm">
-                    <dt className="text-gray-500">{nombresEspecificaciones[key] || key}</dt>
-                    <dd className="text-gray-800 text-right font-medium">{String(value)}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="flex flex-wrap gap-3 mt-2">
-                {(product.etiquetas || []).map((etiqueta) => (
-                  <span key={etiqueta} className="bg-[#f0f2eb] text-[#5c7054] text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                    {etiqueta}
-                  </span>
-                ))}
-              </div>
+                {specifications.length > 0 && (
+                  <>
+                     <hr className="border-gray-200 my-2" />
+                     <dl>
+                       {specifications.map(([key, value]) => (
+                        <div key={key} className="flex justify-between py-1.5 border-b border-gray-100 last:border-0 text-sm">
+                          <dt className="text-gray-500">{nombresEspecificaciones[key] || key}</dt>
+                          <dd className="text-gray-800 text-right font-medium">{String(value)}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                   </>
+                 )}
+                {product.etiquetas?.length > 0 && (
+                  <div className="flex flex-wrap gap-3 mt-2">
+                   {product.etiquetas.map((etiqueta) => (
+                    <span key={etiqueta} className="bg-[#f0f2eb] text-[#5c7054] text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                     {etiqueta}
+                    </span>
+                 ))}
+                </div>
+               )}
               <div className="mt-3 flex w-full flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-4">
                 <div className="flex min-w-fit flex-col">
                   <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">Precio</span>
