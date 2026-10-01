@@ -178,6 +178,14 @@ const productos = [
         relleno: "Espuma HR + plumón reciclado",
         sostenibilidad: "Materiales 100% reciclables"
     }
-    ];
+    ].map((producto) => ({
+        ...producto,
+        medidas: producto.medidas || null,
+        materiales: producto.materiales || null,
+        acabado: producto.acabado || null,
+        rotacion: producto.rotacion || null,
+        garantia: producto.garantia || null,
+        etiquetas: producto.etiquetas || ['DISEÑO ATEMPORAL'],
+    }));
 
 module.exports = productos;
