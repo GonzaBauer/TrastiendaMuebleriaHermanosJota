@@ -1,18 +1,12 @@
-import { useState } from 'react'
-
 function CatalogProductCard({
   category,
   title,
   description,
-  extendedDescription,
   price,
   imageUrl,
   isFeatured,
-  specifications,
+  onSelect,
 }) {
-  const [detailsOpen, setDetailsOpen] = useState(false)
-  const detailsId = `product-details-${title.replace(/\s+/g, '-').toLowerCase()}`
-
   return (
     <article className="relative overflow-hidden rounded-2xl border border-white/80 bg-white/55 shadow-[0_10px_32px_rgba(112,130,104,0.12)] backdrop-blur-sm transition-[scale,box-shadow] duration-500 ease-in-out hover:z-10 hover:scale-[1.01] hover:shadow-[0_14px_34px_rgba(112,130,104,0.15)]">
       <div>
@@ -45,13 +39,11 @@ function CatalogProductCard({
           <p className="text-sm font-bold text-[#70452B]">
             $ {new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(price)}
           </p>
-          {(extendedDescription || specifications.length > 0) && (
+          {onSelect && (
             <button
               className="shrink-0 cursor-pointer border-0 bg-transparent p-0 text-xs font-bold uppercase tracking-wider text-[#A98232] hover:text-[#805E1C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A98232]"
               type="button"
-              aria-expanded={detailsOpen}
-              aria-controls={detailsId}
-              onClick={() => setDetailsOpen((open) => !open)}
+              onClick={onSelect}
             >
               VER DETALLE
             </button>
@@ -59,25 +51,6 @@ function CatalogProductCard({
         </div>
 
       </div>
-      {detailsOpen && (
-        <div className="space-y-3 border-t border-[#8B4513]/15 p-4 pt-3" id={detailsId}>
-          {extendedDescription && (
-            <p className="text-sm leading-relaxed text-[#4E4943]">{extendedDescription}</p>
-          )}
-          {specifications.length > 0 && (
-            <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {specifications.map(({ label, value }) => (
-                <div key={label}>
-                  <dt className="text-[11px] font-semibold uppercase tracking-wider text-[#A0522D]">
-                    {label}
-                  </dt>
-                  <dd className="mt-1 text-sm leading-relaxed text-[#4E4035]">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-        </div>
-      )}
     </article>
   )
 }

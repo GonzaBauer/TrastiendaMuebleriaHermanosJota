@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../../Navbar.jsx'
 import Footer from '../../Footer.jsx'
 import CatalogProductCard from './CatalogProductCard.jsx'
@@ -7,46 +8,8 @@ const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 ).replace(/\/+$/, '')
 
-const etiquetas = {
-  medidas: 'Medidas',
-  materiales: 'Materiales',
-  acabado: 'Acabado',
-  garantia: 'Garantía',
-  rotacion: 'Rotación',
-  cargaMaxima: 'Carga máxima',
-  capacidad: 'Capacidad',
-  modulares: 'Modulares',
-  tapizado: 'Tapizado',
-  confort: 'Confort',
-  almacenamiento: 'Almacenamiento',
-  cables: 'Gestión de cables',
-  extension: 'Extensión',
-  caracteristicas: 'Características',
-  regulacion: 'Regulación',
-  certificacion: 'Certificación',
-  apilables: 'Apilables',
-  incluye: 'Incluye',
-  estructura: 'Estructura',
-  relleno: 'Relleno',
-  sostenibilidad: 'Sostenibilidad',
-}
-
-const camposGenerales = new Set([
-  'id',
-  'nombre',
-  'categoria',
-  'destacado',
-  'precio',
-  'imagen',
-  'descripcion',
-  'descripcionLarga',
-])
-
-function obtenerEtiqueta(campo) {
-  return etiquetas[campo] || campo.replace(/([A-Z])/g, ' $1').replace(/^./, (letra) => letra.toUpperCase())
-}
-
-function CatalogoView() {
+function CatalogoView({ onProductSelect }) {
+  const navigate = useNavigate()
   const [productos, setProductos] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(null)
@@ -130,24 +93,19 @@ function CatalogoView() {
             ) : (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {productosFiltrados.map((producto) => {
-                  const especificaciones = Object.entries(producto).filter(
-                    ([campo, valor]) => !camposGenerales.has(campo) && valor != null,
-                  ).map(([campo, valor]) => ({
-                    label: obtenerEtiqueta(campo),
-                    value: String(valor),
-                  }))
-
                   return (
                     <CatalogProductCard
                       key={producto.id}
                       category={producto.categoria}
                       title={producto.nombre}
                       description={producto.descripcion}
-                      extendedDescription={producto.descripcionLarga}
                       price={producto.precio}
                       imageUrl={new URL(producto.imagen, `${API_BASE_URL}/`).href}
                       isFeatured={producto.destacado}
-                      specifications={especificaciones}
+                      onSelect={() => {
+                        onProductSelect(producto)
+                        navigate(`/productos/${producto.id}`)
+                      }}
                     />
                   )
                 })}
