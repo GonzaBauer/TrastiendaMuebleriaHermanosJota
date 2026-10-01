@@ -45,14 +45,14 @@ function ProductosDestacados() {
   }
 
   return (
-    <section className="bg-alabastro px-4 py-12 sm:px-6 lg:px-8">
-      <div className="group/title mx-auto mt-0 mb-8 flex w-fit flex-col items-center">
+    <section className="bg-alabastro px-4 py-16 sm:px-6 lg:px-8">
+      <div className="group/title mx-auto flex w-fit flex-col items-center">
         <h2 className="text-center text-3xl font-serif uppercase tracking-widest text-[#A0522D] transition-[text-shadow] duration-300 group-hover/title:[text-shadow:0_0_12px_rgba(212,163,72,0.45)]">
           Productos Destacados
         </h2>
         <span className="mt-3 h-px w-14 bg-[#D4A348] transition-all duration-300 group-hover/title:w-24" />
       </div>
-      <div className="mx-auto mt-0 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {productos.map((producto) => (
           <ProductCard producto={producto} key={producto.id} />
         ))}

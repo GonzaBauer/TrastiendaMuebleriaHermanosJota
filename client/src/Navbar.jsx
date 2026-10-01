@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const navigationLinks = [
-  { label: 'Inicio', href: 'inicio' },
+  { label: 'Inicio', href: '/#inicio' },
   { label: 'Productos', href: 'productos' },
   { label: 'Contacto', href: 'contacto' },
 ]
