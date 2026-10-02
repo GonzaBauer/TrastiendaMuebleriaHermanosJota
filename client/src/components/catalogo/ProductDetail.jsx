@@ -34,7 +34,7 @@ const camposProducto = new Set([
   'descripcion', 'descripcionLarga', 'etiquetas',
 ])
 
-function ProductDetail({ product, onBack }) {
+function ProductDetail({ product, onBack, onAddToCart, cartCount }) {
   const name = product.name || product.nombre
   const image = product.image || new URL(product.imagen, `${API_BASE_URL}/`).href
   const specifications = Object.entries(product).filter(
@@ -43,7 +43,7 @@ function ProductDetail({ product, onBack }) {
 
   return (
     <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-      <Navbar />
+      <Navbar cartCount={cartCount} />
       <main className="flex-1 bg-alabastro px-4 py-6 sm:px-6 lg:px-8">
         <nav aria-label="Migas de pan" className="mb-4 flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-gray-500">
           <Link
@@ -108,7 +108,7 @@ function ProductDetail({ product, onBack }) {
                     $ {new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(product.precio)}
                   </span>
                 </div>
-                <button className="ml-auto bg-[#8c4e32] hover:bg-[#734028] text-white px-8 py-3.5 rounded-2xl font-medium w-fit transition-colors shadow-md" type="button">
+                 <button onClick={() => onAddToCart(product)} className="ml-auto bg-[#8c4e32] hover:bg-[#734028] text-white px-8 py-3.5 rounded-2xl font-medium w-fit transition-colors shadow-md" type="button">
                   AÑADIR AL CARRITO
                 </button>
               </div>
