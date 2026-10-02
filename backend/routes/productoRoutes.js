@@ -25,7 +25,12 @@ router.get("/destacados", (_req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
   try {
-    const productoId = parseInt(req.params.id, 10);
+    const productoId = Number(req.params.id);
+    if (!Number.isInteger(productoId)) {
+      const error = new Error("Producto no encontrado");
+      error.status = 404;
+      return next(error);
+    }
     const producto = productos.find((item) => item.id === productoId);
 
     if (!producto) {
@@ -35,17 +40,6 @@ router.get("/:id", (req, res, next) => {
     }
 
     return res.json(producto);
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.post("/", (req, res, next) => {
-  try {
-    const nuevoProducto = req.body;
-    nuevoProducto.id = productos.length + 1;
-    productos.push(nuevoProducto);
-    return res.status(201).json(nuevoProducto);
   } catch (error) {
     return next(error);
   }
