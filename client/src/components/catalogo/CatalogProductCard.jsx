@@ -55,4 +55,4 @@ function CatalogProductCard({
   )
 }
 
-export default CatalogProductCard
+export default CatalogProductCard;
