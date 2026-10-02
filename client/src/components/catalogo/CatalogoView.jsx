@@ -8,7 +8,7 @@ const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 ).replace(/\/+$/, '')
 
-function CatalogoView({ onProductSelect }) {
+function CatalogoView({ onProductSelect, cartCount }) {
   const navigate = useNavigate()
   const [productos, setProductos] = useState([])
   const [cargando, setCargando] = useState(true)
@@ -48,7 +48,7 @@ function CatalogoView({ onProductSelect }) {
 
   return (
     <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-      <Navbar />
+      <Navbar cartCount={cartCount} />
       <main className="min-w-0 flex-1">
         <section className="bg-alabastro px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto mb-8 max-w-6xl rounded-lg border border-white/60 bg-white/35 px-6 py-10 shadow-[0_8px_28px_rgba(104,72,46,0.08)] sm:px-10 sm:py-12">
