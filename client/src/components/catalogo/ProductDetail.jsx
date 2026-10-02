@@ -115,4 +115,4 @@ function ProductDetail({ product, onBack }) {
   )
 }
 
-export default ProductDetail
+export default ProductDetail;

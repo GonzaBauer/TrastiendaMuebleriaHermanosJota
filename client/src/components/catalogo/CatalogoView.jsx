@@ -119,4 +119,4 @@ function CatalogoView({ onProductSelect }) {
   )
 }
 
-export default CatalogoView
+export default CatalogoView;
