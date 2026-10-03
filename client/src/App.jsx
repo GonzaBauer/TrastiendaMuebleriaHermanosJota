@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import HomeView from "./components/home/HomeView.jsx";
-import CatalogoView from "./components/catalogo/CatalogoView.jsx";
-import ProductDetail from "./components/catalogo/ProductDetail.jsx";
-import CarritoView from "./components/carrito/CarritoView.jsx";
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom'
+import HomeView from './components/home/HomeView.jsx'
+import CatalogoView from './components/catalogo/CatalogoView.jsx'
+import ProductDetail from './components/catalogo/ProductDetail.jsx'
+import { ContactForm } from './components/ContactForm.jsx'
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
@@ -178,14 +179,19 @@ function App() {
           onAddToCart={addToCart}
           cartCount={cartCount}
         />
-      )}
-      {view === "cart" && (
-        <CarritoView
-          cart={cart}
-          cartCount={cartCount}
-          onChangeQuantity={changeQuantity}
-          onRemove={removeFromCart}
-          onClear={clearCart}
+        <Route
+          path="/inicio/catalogo/detalle/:id"
+          element={(
+            <ProductDetailRoute
+              selectedProduct={selectedProduct}
+              setSelectedProduct={setSelectedProduct}
+            />
+          )}
+          
+        />
+        <Route 
+          path="/contacto" 
+          element={<ContactForm />} 
         />
       )}
     </div>

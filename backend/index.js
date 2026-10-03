@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const productoRoutes = require("./routes/productoRoutes");
-const logger = require("./middlewares/logger");
+const contactoRoutes = require("./routes/contactoRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +12,7 @@ app.use(express.json());
 app.use("/imagenes", express.static(path.join(__dirname, "imagenes")));
 
 app.use("/api/productos", productoRoutes);
+app.use("/api/contacto", contactoRoutes);
 
 app.get("/", (_req, res) => {
   res.json({ message: "API de Trastienda Mueblería Hermanos Jota" });
