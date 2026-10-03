@@ -6,6 +6,10 @@
   color: #333333;
 }
 
+.contacto-container {
+  padding: 3rem 5rem;
+}
+
 .contacto-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 32px;
@@ -16,6 +20,13 @@
   border-bottom: 2px solid #A0522D;
   padding-bottom: 8px;
 }
+
+.contacto-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
 
 .contacto-grid {
   display: grid;
@@ -69,13 +80,15 @@
   width: 35%;
 }
 
-/* Formulario */
 .form-container {
   background-color: #FFFFFF;
-  padding: 24px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   border: 1px solid #F5E6D3;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 1rem;
 }
 
 .form-group {
@@ -145,3 +158,10 @@
   font-size: 13px;
   text-align: center;
 }
+
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+

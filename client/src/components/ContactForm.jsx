@@ -59,51 +59,10 @@ export const ContactForm = ({ cartCount = 0 }) => {
 
       <section className="contacto-container">
         <h2 className="contacto-title">CONTACTO</h2>
-
-        <div className="contacto-grid">
-          <div className="contacto-info">
-            <div className="info-card">
-              <h3>Hermanos Jota — Casa Taller</h3>
-              <p>Av. San Juan 2847</p>
-              <p>C1232AAB — Barrio de San Cristóbal</p>
-              <p>Ciudad Autónoma de Buenos Aires, Argentina</p>
-              <br />
-              <strong>Horarios:</strong>
-              <p>Lunes a Viernes: 10:00 - 19:00</p>
-              <p>Sábados: 10:00 - 14:00</p>
-            </div>
-
-            <div className="info-card" style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D7CE' }}>
-              <h3>Contacto Digital</h3>
-              <table className="contacto-tabla">
-                <tbody>
-                  <tr>
-                    <td>Sitio web</td>
-                    <td>www.hermanosjota.com.ar</td>
-                  </tr>
-                  <tr>
-                    <td>Email general</td>
-                    <td>info@hermanosjota.com.ar</td>
-                  </tr>
-                  <tr>
-                    <td>Ventas</td>
-                    <td>ventas@hermanosjota.com.ar</td>
-                  </tr>
-                  <tr>
-                    <td>Instagram</td>
-                    <td>@hermanosjota_ba</td>
-                  </tr>
-                  <tr>
-                    <td>WhatsApp</td>
-                    <td>+54 11 4567-8900</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+    
+        <div className="form-wrapper">
           <div className="form-container">
-            <h3>Envíanos un mensaje</h3>
+            <h3 className='form-text'>Envíanos un mensaje</h3>
 
             <form onSubmit={handleSubmit}>
               <div className="form-group">
