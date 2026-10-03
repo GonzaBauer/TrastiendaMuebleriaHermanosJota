@@ -74,24 +74,56 @@ Con el backend en `http://localhost:3000`:
 ```text
 .
 ├── backend/
-│   ├── data/productos.js       # Datos del catálogo
+│   ├── config/                 # Reservado; actualmente vacío
+│   ├── controllers/            # Reservado; actualmente vacío
+│   ├── data/
+│   │   └── productos.js        # Datos del catálogo
 │   ├── imagenes/               # Imágenes servidas por Express
-│   ├── middlewares/logger.js   # Registro de solicitudes
-│   ├── routes/productoRoutes.js
+│   ├── middlewares/
+│   │   └── logger.js           # Registro de solicitudes
+│   ├── models/                 # Reservado; actualmente vacío
+│   ├── routes/
+│   │   └── productoRoutes.js
 │   ├── index.js                # Configuración e inicio de Express
-│   └── package.json
+│   ├── package.json
+│   └── package-lock.json
 ├── client/
-│   ├── public/images/          # Recursos estáticos del sitio
+│   ├── public/
+│   │   └── images/             # Recursos estáticos del sitio
 │   ├── src/
-│   │   ├── components/         # Inicio, catálogo, detalle y carrito
+│   │   ├── assets/             # Recursos importados por el cliente
+│   │   ├── components/
+│   │   │   ├── carrito/
+│   │   │   │   └── CarritoView.jsx
+│   │   │   ├── catalogo/
+│   │   │   │   ├── CatalogoView.jsx
+│   │   │   │   ├── CatalogProductCard.jsx
+│   │   │   │   └── ProductDetail.jsx
+│   │   │   ├── home/
+│   │   │   │   ├── Hero.jsx
+│   │   │   │   ├── HomeView.jsx
+│   │   │   │   └── ProductosDestacados.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   └── ProductList.jsx
 │   │   ├── App.jsx             # Estado y navegación de la aplicación
-│   │   └── index.css
-│   ├── vite.config.js
-│   └── package.json
+│   │   ├── Footer.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   └── Navbar.jsx
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   └── vite.config.js
+├── .github/
+│   └── agents/
+│       └── auditor-frontend-senior.agent.md
+├── .gitignore
 ├── package.json                # Workspaces y comandos del monorepo
+├── package-lock.json
 └── README.md
 ```
-
 ## Requisitos
 
 - Node.js 20.19 o superior, o 22.12 o superior (requisito de Vite 8).
