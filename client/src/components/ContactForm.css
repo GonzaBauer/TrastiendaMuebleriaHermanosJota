@@ -145,31 +145,3 @@
   font-size: 13px;
   text-align: center;
 }
-
-.creditos-container {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: #F5E6D3;
-  border-radius: 8px;
-  font-size: 12px;
-  color: #555;
-}
-
-.creditos-container h4 {
-  font-family: 'Playfair Display', Georgia, serif;
-  color: #A0522D;
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.creditos-content p {
-  margin: 4px 0;
-}
-
-.creditos-copy {
-  margin-top: 15px;
-  padding-top: 10px;
-  border-top: 1px solid #D0C5B8;
-  font-weight: bold;
-}

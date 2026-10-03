@@ -162,7 +162,7 @@ function App() {
 
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
-  return (
+ return (
     <div onClick={handleNavigation}>
       {view === "home" && (
         <HomeView
@@ -206,7 +206,7 @@ function App() {
         />
       )}
 
-      {view === "contact" && <ContactForm />}
+      {view === "contact" && <ContactForm cartCount={cartCount} />}
     </div>
   );
 }
