@@ -104,7 +104,7 @@ export const ContactForm = ({ cartCount = 0 }) => {
                 <label>Mensaje *</label>
                 <textarea
                   name="mensaje"
-                  rows="4"
+                  rows="8"
                   value={formData.mensaje}
                   onChange={handleChange}
                   required
