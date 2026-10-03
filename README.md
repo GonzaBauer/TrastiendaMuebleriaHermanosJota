@@ -74,14 +74,14 @@ Con el backend en `http://localhost:3000`:
 ```text
 .
 ├── backend/
-│   ├── config/                 # Reservado; actualmente vacío
-│   ├── controllers/            # Reservado; actualmente vacío
+│   ├── config/                 
+│   ├── controllers/           
 │   ├── data/
 │   │   └── productos.js        # Datos del catálogo
 │   ├── imagenes/               # Imágenes servidas por Express
 │   ├── middlewares/
 │   │   └── logger.js           # Registro de solicitudes
-│   ├── models/                 # Reservado; actualmente vacío
+│   ├── models/                 
 │   ├── routes/
 │   │   └── productoRoutes.js
 │   ├── index.js                # Configuración e inicio de Express
