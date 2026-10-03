@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom'
 import HomeView from './components/home/HomeView.jsx'
 import CatalogoView from './components/catalogo/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
+import { ContactForm } from './components/ContactForm.jsx'
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
@@ -84,6 +85,11 @@ function App() {
               setSelectedProduct={setSelectedProduct}
             />
           )}
+          
+        />
+        <Route 
+          path="/contacto" 
+          element={<ContactForm />} 
         />
       </Routes>
     </BrowserRouter>
