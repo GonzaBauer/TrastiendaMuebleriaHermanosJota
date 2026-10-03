@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const logger = require("./middlewares/logger");
 const productoRoutes = require("./routes/productoRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
 

@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom'
 import HomeView from './components/home/HomeView.jsx'
 import CatalogoView from './components/catalogo/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
+import CarritoView from './components/carrito/CarritoView.jsx'
 import { ContactForm } from './components/ContactForm.jsx'
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
 ).replace(/\/+$/, "");
+
 const viewPaths = {
   home: "/",
   catalog: "/productos",
   cart: "/carrito",
+  contact: "/contacto",
 };
 
 function getViewFromPath(pathname) {
@@ -40,12 +42,15 @@ function App() {
         const response = await fetch(`${API_BASE_URL}/api/productos`, {
           signal: controller.signal,
         });
-        if (!response.ok)
+
+        if (!response.ok) {
           throw new Error("No se pudieron cargar los productos.");
+        }
 
         const products = await response.json();
-        if (!Array.isArray(products))
+        if (!Array.isArray(products)) {
           throw new Error("La respuesta de productos no es válida.");
+        }
 
         if (controller.signal.aborted) return;
         setData(products);
@@ -57,7 +62,9 @@ function App() {
           );
         }
       } finally {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
 
@@ -79,8 +86,11 @@ function App() {
   function navigateTo(nextView) {
     const nextPath = viewPaths[nextView];
     if (!nextPath) return;
-    if (window.location.pathname !== nextPath)
+
+    if (window.location.pathname !== nextPath) {
       window.history.pushState({}, "", nextPath);
+    }
+
     setView(nextView);
     setSelectedProduct(null);
     window.scrollTo(0, 0);
@@ -96,8 +106,10 @@ function App() {
       event.ctrlKey ||
       event.shiftKey ||
       event.altKey
-    )
+    ) {
       return;
+    }
+
     event.preventDefault();
     navigateTo(link.dataset.view);
   }
@@ -116,9 +128,8 @@ function App() {
 
   function addToCart(product) {
     setCart((previousCart) => {
-      const existingProduct = previousCart.find(
-        (item) => item.id === product.id,
-      );
+      const existingProduct = previousCart.find((item) => item.id === product.id);
+
       if (existingProduct) {
         return previousCart.map((item) =>
           item.id === product.id
@@ -126,6 +137,7 @@ function App() {
             : item,
         );
       }
+
       return [...previousCart, { ...product, cantidad: 1 }];
     });
   }
@@ -147,6 +159,7 @@ function App() {
   function clearCart() {
     setCart([]);
   }
+
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
   return (
@@ -160,6 +173,7 @@ function App() {
           onProductSelect={selectProduct}
         />
       )}
+
       {view === "catalog" && (
         <CatalogoView
           cartCount={cartCount}
@@ -169,6 +183,7 @@ function App() {
           onProductSelect={selectProduct}
         />
       )}
+
       {view === "detail" && selectedProduct && (
         <ProductDetail
           product={selectedProduct}
@@ -179,21 +194,19 @@ function App() {
           onAddToCart={addToCart}
           cartCount={cartCount}
         />
-        <Route
-          path="/inicio/catalogo/detalle/:id"
-          element={(
-            <ProductDetailRoute
-              selectedProduct={selectedProduct}
-              setSelectedProduct={setSelectedProduct}
-            />
-          )}
-          
-        />
-        <Route 
-          path="/contacto" 
-          element={<ContactForm />} 
+      )}
+
+      {view === "cart" && (
+        <CarritoView
+          cart={cart}
+          cartCount={cartCount}
+          onChangeQuantity={changeQuantity}
+          onRemove={removeFromCart}
+          onClear={clearCart}
         />
       )}
+
+      {view === "contact" && <ContactForm />}
     </div>
   );
 }
