@@ -26,32 +26,41 @@ function App() {
   );
   const [previousView, setPreviousView] = useState("catalog");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [products, setProducts] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(`${API_BASE_URL}/api/productos`, { signal: controller.signal })
-      .then((response) => {
+    async function loadProducts() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/productos`, {
+          signal: controller.signal,
+        });
         if (!response.ok)
           throw new Error("No se pudieron cargar los productos.");
-        return response.json();
-      })
-      .then((data) => {
-        if (!Array.isArray(data))
+
+        const products = await response.json();
+        if (!Array.isArray(products))
           throw new Error("La respuesta de productos no es válida.");
-        setProducts(data);
-        setError("");
-      })
-      .catch((fetchError) => {
-        if (fetchError.name !== "AbortError") setError(fetchError.message);
-      })
-      .finally(() => {
+
+        if (controller.signal.aborted) return;
+        setData(products);
+        setError(null);
+      } catch (fetchError) {
+        if (!controller.signal.aborted) {
+          setError(
+            fetchError.message || "Ocurrió un error al cargar los productos.",
+          );
+        }
+      } finally {
         if (!controller.signal.aborted) setLoading(false);
-      });
+      }
+    }
+
+    loadProducts();
 
     return () => controller.abort();
   }, []);
@@ -144,7 +153,7 @@ function App() {
       {view === "home" && (
         <HomeView
           cartCount={cartCount}
-          products={products}
+          products={data}
           loading={loading}
           error={error}
           onProductSelect={selectProduct}
@@ -153,7 +162,7 @@ function App() {
       {view === "catalog" && (
         <CatalogoView
           cartCount={cartCount}
-          products={products}
+          products={data}
           loading={loading}
           error={error}
           onProductSelect={selectProduct}
