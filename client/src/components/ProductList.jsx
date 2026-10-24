@@ -1,9 +1,5 @@
 import { useState } from "react";
-import CatalogProductCard from "./catalogo/CatalogProductCard.jsx";
-
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
+import ProductCard from "./ProductCard.jsx";
 
 function normalizeText(value) {
   return value
@@ -68,15 +64,12 @@ function ProductList({ products, loading, error, onProductSelect }) {
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {productosFiltrados.map((producto) => (
-            <CatalogProductCard
+            <ProductCard
               key={producto.id}
-              category={producto.categoria}
-              title={producto.nombre}
-              description={producto.descripcion}
-              price={producto.precio}
-              imageUrl={new URL(producto.imagen, `${API_BASE_URL}/`).href}
-              isFeatured={producto.destacado}
-              onSelect={() => onProductSelect(producto)}
+              producto={producto}
+              showDescription
+              showFeatured
+              onSelect={onProductSelect}
             />
           ))}
         </div>
