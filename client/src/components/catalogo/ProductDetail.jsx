@@ -1,4 +1,5 @@
 import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../Navbar.jsx";
 import Footer from "../../Footer.jsx";
 
@@ -44,7 +45,23 @@ const camposProducto = new Set([
   "etiquetas",
 ]);
 
-function ProductDetail({ product, onBack, backLabel, onAddToCart, cartCount }) {
+function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const product = products.find((item) => String(item.id) === id);
+
+  if (!product) {
+    return (
+      <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
+        <Navbar cartCount={cartCount} />
+        <main className="flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text">
+          {loading ? "Cargando producto..." : error || "Producto no encontrado."}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const name = product.name || product.nombre;
   const image =
     product.image || new URL(product.imagen, `${API_BASE_URL}/`).href;
@@ -59,10 +76,10 @@ function ProductDetail({ product, onBack, backLabel, onAddToCart, cartCount }) {
         <nav aria-label="Ubicación actual" className="mx-auto mb-6 max-w-6xl">
           <button
             className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
-            onClick={onBack}
+            onClick={() => (window.history.state?.idx > 0 ? navigate(-1) : navigate("/productos"))}
             type="button"
           >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" /> {backLabel}
+            <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Volver
           </button>
         </nav>
         <div className="mx-auto max-w-6xl border-t border-siena/25 pt-8">
