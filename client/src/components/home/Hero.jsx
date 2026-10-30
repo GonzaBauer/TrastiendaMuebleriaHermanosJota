@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 function Hero({ imageUrl = "/images/imagen-hero-banner.png" }) {
@@ -22,14 +23,13 @@ function Hero({ imageUrl = "/images/imagen-hero-banner.png" }) {
             familiar
           </span>
         </p>
-        <a
+        <Link
           className="inline-flex min-h-12 max-w-full items-center justify-center gap-3 rounded-sm bg-siena px-6 py-3.5 text-center font-brand-sans text-sm font-medium uppercase leading-[1.4] tracking-[0.08em] text-alabastro no-underline transition-colors duration-200 hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-vara"
-          href="/productos"
-          data-view="catalog"
+          to="/productos"
         >
           Explorar la colección{" "}
           <ArrowRight aria-hidden="true" className="h-4 w-4" />
-        </a>
+        </Link>
         <ul
           className="mt-5 mb-0 flex list-none flex-wrap gap-2.5 p-0 md:mt-6 md:gap-3"
           aria-label="Nuestros valores"

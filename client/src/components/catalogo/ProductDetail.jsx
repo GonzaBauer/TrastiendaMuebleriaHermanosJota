@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api.js";
 import formatPrice from "../../utils/formatPrice.js";
 
@@ -41,13 +42,10 @@ const camposProducto = new Set([
   "etiquetas",
 ]);
 
-function ProductDetail({
-  product: initialProduct,
-  onBack,
-  backLabel,
-  onAddToCart,
-}) {
-  const [product, setProduct] = useState(initialProduct);
+function ProductDetail({ onAddToCart }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -56,7 +54,7 @@ function ProductDetail({
     async function loadProduct() {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/productos/${initialProduct.id}`,
+          `${API_BASE_URL}/api/productos/${id}`,
           { signal: controller.signal },
         );
 
@@ -84,9 +82,17 @@ function ProductDetail({
 
     loadProduct();
     return () => controller.abort();
-  }, [initialProduct.id]);
+  }, [id]);
 
-  const productToDisplay = product || initialProduct;
+  if (String(product?.id) !== id) {
+    return (
+      <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text">
+        {error || "Cargando producto..."}
+      </main>
+    );
+  }
+
+  const productToDisplay = product;
   const name = productToDisplay.name || productToDisplay.nombre;
   const image = productToDisplay.image || productToDisplay.imagen;
   const specifications = Object.entries(productToDisplay).filter(
@@ -95,21 +101,13 @@ function ProductDetail({
 
   return (
     <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 sm:px-8 lg:px-10">
-        {error && (
-          <p
-            className="mx-auto mb-4 max-w-6xl font-brand-sans text-sm text-red-700"
-            role="alert"
-          >
-            {error}
-          </p>
-        )}
         <nav aria-label="Ubicación actual" className="mx-auto mb-6 max-w-6xl">
           <button
             className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
-            onClick={onBack}
+            onClick={() => (window.history.state?.idx > 0 ? navigate(-1) : navigate("/productos"))}
             type="button"
           >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" /> {backLabel}
+            <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Volver
           </button>
         </nav>
         <div className="mx-auto max-w-6xl border-t border-siena/25 pt-8">

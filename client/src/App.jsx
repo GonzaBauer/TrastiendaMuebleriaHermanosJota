@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import HomeView from './pages/HomeView.jsx'
 import CatalogoView from './pages/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
@@ -8,26 +9,9 @@ import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
 import API_BASE_URL from './config/api.js'
 
-const viewPaths = {
-  home: "/",
-  catalog: "/productos",
-  cart: "/carrito",
-  contact: "/contacto",
-};
-
-function getViewFromPath(pathname) {
-  return (
-    Object.entries(viewPaths).find(([, path]) => path === pathname)?.[0] ||
-    "home"
-  );
-}
-
 function App() {
-  const [view, setView] = useState(() =>
-    getViewFromPath(window.location.pathname),
-  );
-  const [previousView, setPreviousView] = useState("catalog");
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,56 +57,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    function handlePopState() {
-      setView(getViewFromPath(window.location.pathname));
-      setSelectedProduct(null);
-    }
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-  function navigateTo(nextView) {
-    const nextPath = viewPaths[nextView];
-    if (!nextPath) return;
-
-    if (window.location.pathname !== nextPath) {
-      window.history.pushState({}, "", nextPath);
-    }
-
-    setView(nextView);
-    setSelectedProduct(null);
     window.scrollTo(0, 0);
-  }
-
-  function handleNavigation(event) {
-    const link = event.target.closest?.("a[data-view]");
-    if (
-      !link ||
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-    navigateTo(link.dataset.view);
-  }
+  }, [pathname]);
 
   function selectProduct(product) {
-    setPreviousView(view);
-    setSelectedProduct(product);
-    setView("detail");
-    window.scrollTo(0, 0);
-  }
-
-  function returnFromDetail() {
-    setSelectedProduct(null);
-    setView(previousView);
+    navigate(`/productos/${product.id}`);
   }
 
   function addToCart(product) {
@@ -161,48 +100,39 @@ function App() {
 
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
- return (
-    <div
-      className="flex min-h-[100svh] w-full min-w-0 flex-col"
-      onClick={handleNavigation}
-    >
+  const home = <HomeView onProductSelect={selectProduct} />;
+
+  return (
+    <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
       <Navbar cartCount={cartCount} />
-      {view === "home" && (
-        <HomeView
-          onProductSelect={selectProduct}
-        />
-      )}
-
-      {view === "catalog" && (
-        <CatalogoView
-          products={data}
-          loading={loading}
-          error={error}
-          onProductSelect={selectProduct}
-        />
-      )}
-
-      {view === "detail" && selectedProduct && (
-        <ProductDetail
-          product={selectedProduct}
-          onBack={returnFromDetail}
-          backLabel={
-            previousView === "home" ? "Volver al inicio" : "Volver al catálogo"
+      <Routes>
+        <Route path="/" element={home} />
+        <Route
+          path="/productos"
+          element={
+            <CatalogoView
+              products={data}
+              loading={loading}
+              error={error}
+              onProductSelect={selectProduct}
+            />
           }
-          onAddToCart={addToCart}
         />
-      )}
-
-      {view === "cart" && (
-        <CarritoView
-          cart={cart}
-          onChangeQuantity={changeQuantity}
-          onRemove={removeFromCart}
-          onClear={clearCart}
+        <Route path="/productos/:id" element={<ProductDetail onAddToCart={addToCart} />} />
+        <Route
+          path="/carrito"
+          element={
+            <CarritoView
+              cart={cart}
+              onChangeQuantity={changeQuantity}
+              onRemove={removeFromCart}
+              onClear={clearCart}
+            />
+          }
         />
-      )}
-
-      {view === "contact" && <ContactForm />}
+        <Route path="/contacto" element={<ContactForm />} />
+        <Route path="*" element={home} />
+      </Routes>
       <Footer />
     </div>
   );

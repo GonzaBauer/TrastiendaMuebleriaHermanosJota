@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import formatPrice from "../../utils/formatPrice.js";
 
@@ -17,13 +18,12 @@ function CarritoView({ cart, onChangeQuantity, onRemove, onClear }) {
           {cart.length === 0 ? (
             <div className="py-12 text-center font-brand-sans text-text">
               <p className="mb-6">Tu carrito está vacío.</p>
-              <a
-                href="/productos"
-                data-view="catalog"
+              <Link
+                to="/productos"
                 className="inline-flex min-h-12 items-center rounded-sm bg-siena px-6 py-3 font-medium text-alabastro hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-vara"
               >
                 Explorar el catálogo
-              </a>
+              </Link>
             </div>
           ) : (
             <>
