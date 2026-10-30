@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import HomeView from './components/home/HomeView.jsx'
-import CatalogoView from './components/catalogo/CatalogoView.jsx'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import HomeView from './pages/HomeView.jsx'
+import CatalogoView from './pages/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
 import CarritoView from './components/carrito/CarritoView.jsx'
 import { ContactForm } from './components/ContactForm.jsx'
-
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
+import Navbar from './Navbar.jsx'
+import Footer from './Footer.jsx'
+import API_BASE_URL from './config/api.js'
 
 function App() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -56,9 +56,12 @@ function App() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   function selectProduct(product) {
     navigate(`/productos/${product.id}`);
-    window.scrollTo(0, 0);
   }
 
   function addToCart(product) {
@@ -97,28 +100,41 @@ function App() {
 
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
-  const shared = { cartCount, products: data, loading, error };
+  const home = <HomeView onProductSelect={selectProduct} />;
 
   return (
-    <Routes>
-      <Route path="/" element={<HomeView {...shared} onProductSelect={selectProduct} />} />
-      <Route path="/productos" element={<CatalogoView {...shared} onProductSelect={selectProduct} />} />
-      <Route path="/productos/:id" element={<ProductDetail {...shared} onAddToCart={addToCart} />} />
-      <Route
-        path="/carrito"
-        element={
-          <CarritoView
-            cart={cart}
-            cartCount={cartCount}
-            onChangeQuantity={changeQuantity}
-            onRemove={removeFromCart}
-            onClear={clearCart}
-          />
-        }
-      />
-      <Route path="/contacto" element={<ContactForm cartCount={cartCount} />} />
-      <Route path="*" element={<HomeView {...shared} onProductSelect={selectProduct} />} />
-    </Routes>
+    <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
+      <Navbar cartCount={cartCount} />
+      <Routes>
+        <Route path="/" element={home} />
+        <Route
+          path="/productos"
+          element={
+            <CatalogoView
+              products={data}
+              loading={loading}
+              error={error}
+              onProductSelect={selectProduct}
+            />
+          }
+        />
+        <Route path="/productos/:id" element={<ProductDetail onAddToCart={addToCart} />} />
+        <Route
+          path="/carrito"
+          element={
+            <CarritoView
+              cart={cart}
+              onChangeQuantity={changeQuantity}
+              onRemove={removeFromCart}
+              onClear={clearCart}
+            />
+          }
+        />
+        <Route path="/contacto" element={<ContactForm />} />
+        <Route path="*" element={home} />
+      </Routes>
+      <Footer />
+    </div>
   );
 }
 

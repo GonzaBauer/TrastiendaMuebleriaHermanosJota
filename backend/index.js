@@ -2,8 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const logger = require("./middlewares/logger");
+const notFound = require("./middlewares/notFound");
+const errorHandler = require("./middlewares/errorHandler");
+const apiController = require("./controllers/apiController");
 const productoRoutes = require("./routes/productoRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
+const conectarDB = require('./config/db'); 
+require('dotenv').config();
+
+conectarDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,25 +22,10 @@ app.use("/imagenes", express.static(path.join(__dirname, "imagenes")));
 app.use("/api/productos", productoRoutes);
 app.use("/api/contacto", contactoRoutes);
 
-app.get("/", (_req, res) => {
-  res.json({ message: "API de Trastienda Mueblería Hermanos Jota" });
-});
+app.get("/", apiController.getApiInfo);
 
-app.use((req, res, next) => {
-  const error = new Error("Ruta no encontrada: " + req.originalUrl);
-  error.status = 404;
-  next(error);
-});
-
-app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-
-  console.error(err.message, err.stack);
-
-  res.status(statusCode).json({
-    message: statusCode >= 500 ? "Error interno del servidor" : err.message,
-  });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);

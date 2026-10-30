@@ -1,24 +1,15 @@
 import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import Navbar from "../../Navbar.jsx";
-import Footer from "../../Footer.jsx";
+import formatPrice from "../../utils/formatPrice.js";
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
-const formatearPrecio = (valor) =>
-  new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 }).format(valor);
-
-function CarritoView({ cart, cartCount, onChangeQuantity, onRemove, onClear }) {
+function CarritoView({ cart, onChangeQuantity, onRemove, onClear }) {
   const total = cart.reduce(
     (suma, item) => suma + item.precio * item.cantidad,
     0,
   );
 
   return (
-    <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-      <Navbar cartCount={cartCount} />
-      <main className="flex-1 bg-alabastro px-5 py-10 sm:px-8 lg:px-10">
+    <main className="min-w-0 flex-1 bg-alabastro px-5 py-10 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-4xl">
           <h1 className="mb-8 border-b border-siena/25 pb-6 font-brand-serif text-3xl uppercase tracking-[0.1em] text-siena">
             Tu carrito
@@ -43,7 +34,7 @@ function CarritoView({ cart, cartCount, onChangeQuantity, onRemove, onClear }) {
                     className="flex flex-wrap items-center gap-4 border-b border-siena/20 py-5 first:border-t"
                   >
                     <img
-                      src={new URL(item.imagen, `${API_BASE_URL}/`).href}
+                      src={item.imagen}
                       alt={item.nombre}
                       width="80"
                       height="80"
@@ -54,7 +45,7 @@ function CarritoView({ cart, cartCount, onChangeQuantity, onRemove, onClear }) {
                         {item.nombre}
                       </p>
                       <p className="font-brand-sans text-sm text-text">
-                        $ {formatearPrecio(item.precio)}
+                        $ {formatPrice(item.precio)}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -82,7 +73,7 @@ function CarritoView({ cart, cartCount, onChangeQuantity, onRemove, onClear }) {
                       </button>
                     </div>
                     <p className="w-28 text-right font-brand-sans font-semibold tabular-nums text-siena">
-                      $ {formatearPrecio(item.precio * item.cantidad)}
+                      $ {formatPrice(item.precio * item.cantidad)}
                     </p>
                     <button
                       type="button"
@@ -105,15 +96,13 @@ function CarritoView({ cart, cartCount, onChangeQuantity, onRemove, onClear }) {
                   Vaciar carrito
                 </button>
                 <p className="font-brand-serif text-2xl text-siena">
-                  Total: $ {formatearPrecio(total)}
+                  Total: $ {formatPrice(total)}
                 </p>
               </div>
             </>
           )}
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }
 

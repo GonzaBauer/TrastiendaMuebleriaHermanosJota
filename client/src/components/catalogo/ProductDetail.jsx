@@ -1,11 +1,8 @@
+import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navbar from "../../Navbar.jsx";
-import Footer from "../../Footer.jsx";
-
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
+import API_BASE_URL from "../../config/api.js";
+import formatPrice from "../../utils/formatPrice.js";
 
 const nombresEspecificaciones = {
   medidas: "Medidas",
@@ -45,34 +42,65 @@ const camposProducto = new Set([
   "etiquetas",
 ]);
 
-function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
+function ProductDetail({ onAddToCart }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find((item) => String(item.id) === id);
+  const [product, setProduct] = useState(null);
+  const [error, setError] = useState(null);
 
-  if (!product) {
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadProduct() {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/productos/${id}`,
+          { signal: controller.signal },
+        );
+
+        if (!response.ok) {
+          throw new Error("No se pudo cargar el detalle del producto.");
+        }
+
+        const detail = await response.json();
+        if (!detail || typeof detail !== "object") {
+          throw new Error("La respuesta del producto no es válida.");
+        }
+
+        if (!controller.signal.aborted) {
+          setProduct(detail);
+          setError(null);
+        }
+      } catch (fetchError) {
+        if (!controller.signal.aborted) {
+          setError(
+            fetchError.message || "Ocurrió un error al cargar el producto.",
+          );
+        }
+      }
+    }
+
+    loadProduct();
+    return () => controller.abort();
+  }, [id]);
+
+  if (String(product?.id) !== id) {
     return (
-      <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-        <Navbar cartCount={cartCount} />
-        <main className="flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text">
-          {loading ? "Cargando producto..." : error || "Producto no encontrado."}
-        </main>
-        <Footer />
-      </div>
+      <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text">
+        {error || "Cargando producto..."}
+      </main>
     );
   }
 
-  const name = product.name || product.nombre;
-  const image =
-    product.image || new URL(product.imagen, `${API_BASE_URL}/`).href;
-  const specifications = Object.entries(product).filter(
+  const productToDisplay = product;
+  const name = productToDisplay.name || productToDisplay.nombre;
+  const image = productToDisplay.image || productToDisplay.imagen;
+  const specifications = Object.entries(productToDisplay).filter(
     ([key, value]) => !camposProducto.has(key) && value != null && value !== "",
   );
 
   return (
-    <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-      <Navbar cartCount={cartCount} />
-      <main className="flex-1 bg-alabastro px-5 py-8 sm:px-8 lg:px-10">
+    <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 sm:px-8 lg:px-10">
         <nav aria-label="Ubicación actual" className="mx-auto mb-6 max-w-6xl">
           <button
             className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
@@ -95,15 +123,15 @@ function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
             </div>
             <div className="flex min-w-0 flex-col gap-4 py-2">
               <span className="font-brand-sans text-xs font-semibold uppercase tracking-[0.1em] text-siena">
-                {product.category || product.categoria}
+                {productToDisplay.category || productToDisplay.categoria}
               </span>
               <h1 className="font-brand-serif text-3xl uppercase leading-tight tracking-[0.08em] text-siena sm:text-4xl">
                 {name}
               </h1>
               <p className="font-brand-sans text-base leading-relaxed text-text">
-                {product.descripcionLarga ||
-                  product.description ||
-                  product.descripcion}
+                {productToDisplay.descripcionLarga ||
+                  productToDisplay.description ||
+                  productToDisplay.descripcion}
               </p>
               {specifications.length > 0 && (
                 <dl className="mt-2 divide-y divide-siena/15 border-y border-siena/20">
@@ -122,9 +150,9 @@ function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
                   ))}
                 </dl>
               )}
-              {product.etiquetas?.length > 0 && (
+              {productToDisplay.etiquetas?.length > 0 && (
                 <div className="mt-1 flex flex-wrap gap-2">
-                  {product.etiquetas.map((etiqueta) => (
+                  {productToDisplay.etiquetas.map((etiqueta) => (
                     <span
                       key={etiqueta}
                       className="border border-vara/50 bg-vara/10 px-3 py-1.5 font-brand-sans text-xs font-semibold uppercase tracking-[0.08em] text-siena"
@@ -141,13 +169,11 @@ function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
                   </span>
                   <span className="font-brand-serif text-3xl tabular-nums text-siena">
                     ${" "}
-                    {new Intl.NumberFormat("es-AR", {
-                      maximumFractionDigits: 0,
-                    }).format(product.precio)}
+                    {formatPrice(productToDisplay.precio)}
                   </span>
                 </div>
                 <button
-                  onClick={() => onAddToCart(product)}
+                  onClick={() => onAddToCart(productToDisplay)}
                   className="inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-siena px-6 py-3 font-brand-sans text-sm font-medium uppercase tracking-[0.08em] text-alabastro transition-colors hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-vara"
                   type="button"
                 >
@@ -158,9 +184,7 @@ function ProductDetail({ products, loading, error, onAddToCart, cartCount }) {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }
 
