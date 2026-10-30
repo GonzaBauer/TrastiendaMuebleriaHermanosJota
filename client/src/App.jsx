@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
-import HomeView from './components/home/HomeView.jsx'
-import CatalogoView from './components/catalogo/CatalogoView.jsx'
+import HomeView from './pages/HomeView.jsx'
+import CatalogoView from './pages/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
 import CarritoView from './components/carrito/CarritoView.jsx'
 import { ContactForm } from './components/ContactForm.jsx'
-
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
+import Navbar from './Navbar.jsx'
+import Footer from './Footer.jsx'
+import API_BASE_URL from './config/api.js'
 
 const viewPaths = {
   home: "/",
@@ -163,20 +162,19 @@ function App() {
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
  return (
-    <div onClick={handleNavigation}>
+    <div
+      className="flex min-h-[100svh] w-full min-w-0 flex-col"
+      onClick={handleNavigation}
+    >
+      <Navbar cartCount={cartCount} />
       {view === "home" && (
         <HomeView
-          cartCount={cartCount}
-          products={data}
-          loading={loading}
-          error={error}
           onProductSelect={selectProduct}
         />
       )}
 
       {view === "catalog" && (
         <CatalogoView
-          cartCount={cartCount}
           products={data}
           loading={loading}
           error={error}
@@ -192,21 +190,20 @@ function App() {
             previousView === "home" ? "Volver al inicio" : "Volver al catálogo"
           }
           onAddToCart={addToCart}
-          cartCount={cartCount}
         />
       )}
 
       {view === "cart" && (
         <CarritoView
           cart={cart}
-          cartCount={cartCount}
           onChangeQuantity={changeQuantity}
           onRemove={removeFromCart}
           onClear={clearCart}
         />
       )}
 
-      {view === "contact" && <ContactForm cartCount={cartCount} />}
+      {view === "contact" && <ContactForm />}
+      <Footer />
     </div>
   );
 }

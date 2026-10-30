@@ -48,12 +48,12 @@ El carrito se guarda únicamente en el estado de la aplicación: se vacía al re
 
 ## Arquitectura
 
-El cliente React solicita los productos al servidor Express. El backend responde con los datos del módulo local y también publica las imágenes almacenadas en `backend/imagenes`. Las imágenes propias de la interfaz, como el logo y el hero, se sirven desde `client/public/images`.
+El cliente React solicita el catálogo al servidor Express, y consulta por separado los productos destacados y el detalle de cada producto. El backend responde con los datos del módulo local y también publica las imágenes almacenadas en `backend/imagenes`. En desarrollo, Vite redirige las solicitudes de `/api` y `/imagenes` al backend. Las imágenes propias de la interfaz, como el logo y el hero, se sirven desde `client/public/images`.
 
 ```mermaid
 flowchart LR
 	Browser[ navegador ] -->|HTTP / JSON| Client[React + Vite]
-	Client -->|GET /api/productos| API[Express]
+	Client -->|GET productos, destacados y detalle| API[Express]
 	API --> Data[backend/data/productos.js]
 	Client -->|solicitud de imágenes| API
 	Client -->|recursos estáticos| Public[client/public/images]
@@ -67,6 +67,7 @@ Con el backend en `http://localhost:3000`:
 - `GET /api/productos` devuelve el catálogo completo.
 - `GET /api/productos/destacados` devuelve hasta tres productos destacados.
 - `GET /api/productos/:id` devuelve el producto cuyo identificador coincide; responde 404 si no existe.
+- `POST /api/contacto` recibe mensajes del formulario de contacto.
 - `/imagenes/*` sirve los archivos de imágenes del backend.
 
 ## Estructura del proyecto
@@ -76,13 +77,19 @@ Con el backend en `http://localhost:3000`:
 ├── backend/
 │   ├── config/                 
 │   ├── controllers/           
+│   │   ├── apiController.js    # Respuesta de estado de la API
+│   │   ├── contactoController.js
+│   │   └── productoController.js
 │   ├── data/
 │   │   └── productos.js        # Datos del catálogo
 │   ├── imagenes/               # Imágenes servidas por Express
 │   ├── middlewares/
-│   │   └── logger.js           # Registro de solicitudes
+│   │   ├── errorHandler.js     # Respuestas de error
+│   │   ├── logger.js           # Registro de solicitudes
+│   │   └── notFound.js         # Rutas no encontradas
 │   ├── models/                 
 │   ├── routes/
+│   │   ├── contactoRoutes.js
 │   │   └── productoRoutes.js
 │   ├── index.js                # Configuración e inicio de Express
 │   ├── package.json
@@ -92,19 +99,23 @@ Con el backend en `http://localhost:3000`:
 │   │   └── images/             # Recursos estáticos del sitio
 │   ├── src/
 │   │   ├── assets/             # Recursos importados por el cliente
+│   │   ├── config/
+│   │   │   └── api.js          # URL base de la API y de imágenes
 │   │   ├── components/
 │   │   │   ├── carrito/
 │   │   │   │   └── CarritoView.jsx
 │   │   │   ├── catalogo/
-│   │   │   │   ├── CatalogoView.jsx
-│   │   │   │   ├── CatalogProductCard.jsx
 │   │   │   │   └── ProductDetail.jsx
 │   │   │   ├── home/
 │   │   │   │   ├── Hero.jsx
-│   │   │   │   ├── HomeView.jsx
 │   │   │   │   └── ProductosDestacados.jsx
 │   │   │   ├── ProductCard.jsx
 │   │   │   └── ProductList.jsx
+│   │   ├── pages/
+│   │   │   ├── CatalogoView.jsx
+│   │   │   └── HomeView.jsx
+│   │   ├── utils/
+│   │   │   └── formatPrice.js
 │   │   ├── App.jsx             # Estado y navegación de la aplicación
 │   │   ├── Footer.jsx
 │   │   ├── index.css
@@ -156,7 +167,7 @@ npm run start
 ### Configuración
 
 - `PORT` (backend): puerto HTTP de Express. Su valor predeterminado es `3000`.
-- `VITE_API_BASE_URL` (frontend): URL base de la API. Su valor predeterminado es `http://localhost:3000`. Si se define, puede guardarse en `client/.env.local`, por ejemplo:
+- `VITE_API_BASE_URL` (frontend): URL base opcional para la API y las imágenes. Si se omite, el cliente usa rutas relativas (redirigidas por Vite durante el desarrollo); para una API en otro origen, definirla en `client/.env.local`, por ejemplo:
 
 ```env
 VITE_API_BASE_URL=http://localhost:3000

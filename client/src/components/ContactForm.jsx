@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import Navbar from '../Navbar.jsx'; // Ajusta la ruta si Navbar está en otra carpeta
-import Footer from '../Footer.jsx'; // Ajusta la ruta según la ubicación de Footer
+import API_BASE_URL from "../config/api.js";
 import './ContactForm.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
-export const ContactForm = ({ cartCount = 0 }) => {
+export const ContactForm = () => {
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -54,9 +52,7 @@ export const ContactForm = ({ cartCount = 0 }) => {
   };
 
   return (
-    <>
-      <Navbar cartCount={cartCount} activeView="contact" />
-
+    <main className="flex-1">
       <section className="contacto-container">
         <h2 className="contacto-title">CONTACTO</h2>
     
@@ -136,7 +132,6 @@ export const ContactForm = ({ cartCount = 0 }) => {
         </div>
       </section>
 
-      <Footer />
-    </>
+    </main>
   );
 };
