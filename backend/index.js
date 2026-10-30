@@ -7,6 +7,10 @@ const errorHandler = require("./middlewares/errorHandler");
 const apiController = require("./controllers/apiController");
 const productoRoutes = require("./routes/productoRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
+const conectarDB = require('./config/db'); 
+require('dotenv').config();
+
+conectarDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;

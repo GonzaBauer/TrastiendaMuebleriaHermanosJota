@@ -1,4 +1,6 @@
-function createContactMessage(req, res, next) {
+const Contacto = require("../models/contacto.model");
+
+async function createContactMessage(req, res, next) {
   try {
     const { nombre, email, asunto, mensaje } = req.body;
 
@@ -19,16 +21,12 @@ function createContactMessage(req, res, next) {
       return next(error);
     }
 
-    const nuevoMensaje = {
-      id: Date.now(),
+    const nuevoMensaje = await Contacto.create({
       nombre: nombre.trim(),
       email: email.trim(),
       asunto: asunto ? asunto.trim() : "Consulta general",
       mensaje: mensaje.trim(),
-      fecha: new Date().toISOString(),
-    };
-
-    console.log("Mensaje de contacto recibido:", nuevoMensaje);
+    });
 
     return res.status(201).json({
       ok: true,
