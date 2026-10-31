@@ -8,7 +8,6 @@ const ProductoSchema = new mongoose.Schema({
     },
     categoria: {
         type: String,
-        required: [true, 'La categoría es obligatoria'],
         trim: true,
         enum: {
             values: ['comedor', 'sala', 'trabajo', 'dormitorio', 'mesa', 'almacenamiento'],
@@ -19,42 +18,26 @@ const ProductoSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    stock: {
+        type: Number,
+        min: [0, 'El stock no puede ser negativo']
+    },
     precio: {
     type: Number,
     required: [true, 'El precio es obligatorio'],
     min: [0, 'El precio no puede ser negativo']
     },
-    imagen: {
-    type: String,
-    required: [true, 'La imagen es obligatoria'],
+    imagenUrl: {
+    type: String
     },
     descripcion: {
     type: String,
-    required: [true, 'La descripción es obligatoria'],
-    },
-    descripcionLarga: {
-    type: String,
-    required: [true, 'La descripción larga es obligatoria'],
     },
     medidas: {
-    type: String,
-    required: [true, 'Las medidas son obligatorias']
+    type: String
     },
     materiales: {
-    type: String,
-    required: [true, 'Los materiales son obligatorios']
-    },
-    acabado: {
-    type: String,
-    required: [true, 'El acabado es obligatorio']
-    },
-    rotacion: {
-    type: String,
-    required: [true, 'La rotación es obligatoria']
-    },
-    garantia: {
-    type: String,
-    required: [true, 'La garantía es obligatoria']
+    type: String
     }
     },{
         timestamps: true // Agrega createdAt y updatedAt automáticamente
