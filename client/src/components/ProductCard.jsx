@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import formatPrice from "../utils/formatPrice.js";
+import getProductImage from "../utils/getProductImage.js";
 
 function ProductCard({
   producto,
@@ -9,7 +10,7 @@ function ProductCard({
 }) {
   const name = producto.nombre || producto.name;
   const category = producto.categoria || producto.category;
-  const image = producto.imagen || producto.image;
+  const image = getProductImage(producto);
 
   return (
     <button

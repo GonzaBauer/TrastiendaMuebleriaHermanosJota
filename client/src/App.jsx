@@ -7,8 +7,9 @@ import CarritoView from './components/carrito/CarritoView.jsx'
 import { ContactForm } from './components/ContactForm.jsx'
 import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
-import API_BASE_URL from './config/api.js'
 import CrearProductoView from './pages/CrearProductoView.jsx'
+import EditarProductoView from './pages/EditarProductoView.jsx'
+import { getProductos } from './service/productoService.js'
 
 function App() {
   const navigate = useNavigate();
@@ -17,21 +18,14 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
+  const [productsVersion, setProductsVersion] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function loadProducts() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/productos`, {
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error("No se pudieron cargar los productos.");
-        }
-
-        const products = await response.json();
+        const products = await getProductos(controller.signal);
         if (!Array.isArray(products)) {
           throw new Error("La respuesta de productos no es válida.");
         }
@@ -55,7 +49,7 @@ function App() {
     loadProducts();
 
     return () => controller.abort();
-  }, []);
+  }, [productsVersion]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -63,6 +57,16 @@ function App() {
 
   function selectProduct(product) {
     navigate(`/productos/${product.id}`);
+  }
+
+  function refreshProducts() {
+    setProductsVersion((version) => version + 1);
+  }
+
+  function handleProductDeleted(id) {
+    removeFromCart(id);
+    refreshProducts();
+    navigate("/productos");
   }
 
   function addToCart(product) {
@@ -119,7 +123,15 @@ function App() {
             />
           }
         />
-        <Route path="/productos/:id" element={<ProductDetail onAddToCart={addToCart} />} />
+        <Route
+          path="/productos/:id"
+          element={
+            <ProductDetail
+              onAddToCart={addToCart}
+              onProductDeleted={handleProductDeleted}
+            />
+          }
+        />
         <Route
           path="/carrito"
           element={
@@ -134,7 +146,11 @@ function App() {
         <Route path="/contacto" element={<ContactForm />} />
         <Route
           path="/admin/crear-producto"
-          element={<CrearProductoView />}
+          element={<CrearProductoView onProductSaved={refreshProducts} />}
+        />
+        <Route
+          path="/admin/editar-producto/:id"
+          element={<EditarProductoView onProductSaved={refreshProducts} />}
         />
         <Route path="*" element={home} />
       </Routes>

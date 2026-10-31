@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import formatPrice from "../../utils/formatPrice.js";
+import getProductImage from "../../utils/getProductImage.js";
 
 function CarritoView({ cart, onChangeQuantity, onRemove, onClear }) {
   const total = cart.reduce(
@@ -34,7 +35,7 @@ function CarritoView({ cart, onChangeQuantity, onRemove, onClear }) {
                     className="flex flex-wrap items-center gap-4 border-b border-siena/20 py-5 first:border-t"
                   >
                     <img
-                      src={item.imagen}
+                      src={getProductImage(item)}
                       alt={item.nombre}
                       width="80"
                       height="80"

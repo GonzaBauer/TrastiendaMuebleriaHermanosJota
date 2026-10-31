@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import ProductAdminActions from "./ProductAdminActions.jsx";
+import { getProductoById } from "../../service/productoService.js";
 import formatPrice from "../../utils/formatPrice.js";
+import getProductImage from "../../utils/getProductImage.js";
 
 const nombresEspecificaciones = {
   medidas: "Medidas",
@@ -36,12 +39,13 @@ const camposProducto = new Set([
   "precio",
   "imagen",
   "image",
+  "imagenUrl",
   "descripcion",
   "descripcionLarga",
   "etiquetas",
 ]);
 
-function ProductDetail({ onAddToCart }) {
+function ProductDetail({ onAddToCart, onProductDeleted }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -56,16 +60,7 @@ function ProductDetail({ onAddToCart }) {
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/productos/${id}`,
-          { signal: controller.signal },
-        );
-
-        if (!response.ok) {
-          throw new Error("No se pudo cargar el detalle del producto.");
-        }
-
-        const detail = await response.json();
+        const detail = await getProductoById(id, controller.signal);
         if (!detail || typeof detail !== "object" || Array.isArray(detail)) {
           throw new Error("La respuesta del producto no es válida.");
         }
@@ -111,10 +106,7 @@ function ProductDetail({ onAddToCart }) {
 
   const productToDisplay = product;
   const name = productToDisplay.name || productToDisplay.nombre;
-  const image =
-    productToDisplay.image ||
-    productToDisplay.imagen ||
-    productToDisplay.imagenUrl;
+  const image = getProductImage(productToDisplay);
   const specifications = Object.entries(productToDisplay).filter(
     ([key, value]) =>
       !camposProducto.has(key) && key !== "stock" && value != null && value !== "",
@@ -206,6 +198,11 @@ function ProductDetail({ onAddToCart }) {
                   al carrito
                 </button>
               </div>
+              <ProductAdminActions
+                id={productToDisplay.id}
+                name={name}
+                onDeleted={onProductDeleted}
+              />
             </div>
           </div>
         </div>

@@ -2,16 +2,45 @@ import API_BASE_URL from '../config/api';
 
 const API_URL = `${API_BASE_URL}/api/productos`;
 
-const handleResponse = async (res) => {
-  if (!res.ok) throw new Error(`Error ${res.status}`);
-  return res.json();
+const readBody = async (res) => {
+  const body = await res.text();
+  if (!body) return null;
+
+  try {
+    return JSON.parse(body);
+  } catch {
+    return null;
+  }
 };
 
-export const getProductos = () =>
-  fetch(API_URL).then(handleResponse);
+const getErrorMessage = (data, status) => {
+  if (typeof data?.message === 'string' && data.message) return data.message;
+  if (typeof data?.error === 'string' && data.error) return data.error;
 
-export const getProductoById = (id) =>
-  fetch(`${API_URL}/${id}`).then(handleResponse);
+  if (Array.isArray(data?.errors)) {
+    const messages = data.errors
+      .map((error) =>
+        typeof error === 'string' ? error : error?.message || error?.msg,
+      )
+      .filter(Boolean);
+
+    if (messages.length > 0) return messages.join(' ');
+  }
+
+  return `No se pudo completar la operación (HTTP ${status}).`;
+};
+
+const handleResponse = async (res) => {
+  const data = await readBody(res);
+  if (!res.ok) throw new Error(getErrorMessage(data, res.status));
+  return data;
+};
+
+export const getProductos = (signal) =>
+  fetch(API_URL, { signal }).then(handleResponse);
+
+export const getProductoById = (id, signal) =>
+  fetch(`${API_URL}/${id}`, { signal }).then(handleResponse);
 
 export const createProducto = (data) =>
   fetch(API_URL, {
@@ -30,5 +59,5 @@ export const updateProducto = (id, data) =>
 export const deleteProducto = (id) =>
   fetch(`${API_URL}/${id}`, { method: 'DELETE' }).then(handleResponse);
 
-export const getProductosDestacados = () =>
-  fetch(`${API_URL}/destacados`).then(handleResponse);
+export const getProductosDestacados = (signal) =>
+  fetch(`${API_URL}/destacados`, { signal }).then(handleResponse);
