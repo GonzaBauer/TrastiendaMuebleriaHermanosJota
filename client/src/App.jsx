@@ -8,6 +8,7 @@ import { ContactForm } from './components/ContactForm.jsx'
 import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
 import API_BASE_URL from './config/api.js'
+import CrearProductoView from './pages/CrearProductoView.jsx'
 
 function App() {
   const navigate = useNavigate();
@@ -131,6 +132,10 @@ function App() {
           }
         />
         <Route path="/contacto" element={<ContactForm />} />
+        <Route
+          path="/admin/crear-producto"
+          element={<CrearProductoView />}
+        />
         <Route path="*" element={home} />
       </Routes>
       <Footer />

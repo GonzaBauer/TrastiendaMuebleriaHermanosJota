@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import API_BASE_URL from "../../config/api.js";
 import formatPrice from "../../utils/formatPrice.js";
 
 const nombresEspecificaciones = {
@@ -47,14 +46,18 @@ function ProductDetail({ onAddToCart }) {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function loadProduct() {
+      setLoading(true);
+      setError(null);
+
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/productos/${id}`,
+          `/api/productos/${id}`,
           { signal: controller.signal },
         );
 
@@ -63,19 +66,22 @@ function ProductDetail({ onAddToCart }) {
         }
 
         const detail = await response.json();
-        if (!detail || typeof detail !== "object") {
+        if (!detail || typeof detail !== "object" || Array.isArray(detail)) {
           throw new Error("La respuesta del producto no es válida.");
         }
 
         if (!controller.signal.aborted) {
           setProduct(detail);
-          setError(null);
         }
       } catch (fetchError) {
         if (!controller.signal.aborted) {
           setError(
             fetchError.message || "Ocurrió un error al cargar el producto.",
           );
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
         }
       }
     }
@@ -84,19 +90,34 @@ function ProductDetail({ onAddToCart }) {
     return () => controller.abort();
   }, [id]);
 
-  if (String(product?.id) !== id) {
+  if (loading) {
     return (
       <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text">
-        {error || "Cargando producto..."}
+        Cargando...
+      </main>
+    );
+  }
+
+  if (error || String(product?.id) !== id) {
+    return (
+      <main
+        className="min-w-0 flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text"
+        role="alert"
+      >
+        {error || "No se pudo encontrar el producto."}
       </main>
     );
   }
 
   const productToDisplay = product;
   const name = productToDisplay.name || productToDisplay.nombre;
-  const image = productToDisplay.image || productToDisplay.imagen;
+  const image =
+    productToDisplay.image ||
+    productToDisplay.imagen ||
+    productToDisplay.imagenUrl;
   const specifications = Object.entries(productToDisplay).filter(
-    ([key, value]) => !camposProducto.has(key) && value != null && value !== "",
+    ([key, value]) =>
+      !camposProducto.has(key) && key !== "stock" && value != null && value !== "",
   );
 
   return (
@@ -132,6 +153,10 @@ function ProductDetail({ onAddToCart }) {
                 {productToDisplay.descripcionLarga ||
                   productToDisplay.description ||
                   productToDisplay.descripcion}
+              </p>
+              <p className="font-brand-sans text-sm text-text">
+                <span className="font-semibold">Stock:</span>{" "}
+                {productToDisplay.stock ?? "No disponible"}
               </p>
               {specifications.length > 0 && (
                 <dl className="mt-2 divide-y divide-siena/15 border-y border-siena/20">
