@@ -93,6 +93,17 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
     );
   }
 
+const productId = product?._id || product?.id;
+
+if (error || String(productId) !== id) {
+  return (
+    <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 text-center font-brand-sans text-text" role="alert">
+      {error || "No se pudo encontrar el producto."}
+    </main>
+  );
+}
+
+/*
   if (error || String(product?.id) !== id) {
     return (
       <main
@@ -103,7 +114,7 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
       </main>
     );
   }
-
+*/
   const productToDisplay = product;
   const name = productToDisplay.name || productToDisplay.nombre;
   const image = getProductImage(productToDisplay);
