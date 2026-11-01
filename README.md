@@ -2,6 +2,11 @@
 
 Catálogo web para una mueblería, construido con React y una API REST en Express. Permite explorar productos, consultar sus detalles y armar un carrito de compra en la interfaz.
 
+## Despliegues
+
+- Frontend (Vercel): https://trastienda-muebleria-hermanos-jota.vercel.app
+- Backend (Render): https://trastiendamuebleriahermanosjota.onrender.com
+
 ## Descripción
 
 Hermanos Jota es una aplicación web de presentación y exploración de muebles. Está pensada para personas que quieren conocer el catálogo, buscar productos por nombre y revisar sus características antes de contactar a la tienda.
@@ -164,14 +169,32 @@ Para ejecutar el backend sin modo de desarrollo:
 npm run start
 ```
 
-### Configuración
+### Variables de entorno
 
-- `PORT` (backend): puerto HTTP de Express. Su valor predeterminado es `3000`.
-- `VITE_API_BASE_URL` (frontend): URL base opcional para la API y las imágenes. Si se omite, el cliente usa rutas relativas (redirigidas por Vite durante el desarrollo); para una API en otro origen, definirla en `client/.env.local`, por ejemplo:
+| Variable | Servicio | Obligatoria | Descripción |
+| --- | --- | --- | --- |
+| `MONGO_URI` | Backend | Sí | URI de conexión a MongoDB Atlas. Sin ella, el servidor no inicia. |
+| `PORT` | Backend | No | Puerto HTTP de Express. Su valor predeterminado es `3000`; Render lo define automáticamente. |
+| `VITE_API_BASE_URL` | Frontend | Solo en producción | URL base de la API, sin `/api` al final. Si se omite, el cliente usa rutas relativas, que Vite redirige al backend durante el desarrollo. |
+
+#### Desarrollo local
+
+Crear el archivo del backend a partir del ejemplo y completar `MONGO_URI` con los datos del cluster, incluido el nombre de la base. Los archivos `.env` no se suben al repositorio.
+
+```bash
+cp backend/.env.example backend/.env
+```
 
 ```env
-VITE_API_BASE_URL=http://localhost:3000
+MONGO_URI=mongodb+srv://<usuario>:<contraseña>@<tu_cluster>.mongodb.net/<nombre_de_tu_base_de_datos>?retryWrites=true&w=majority
 ```
+
+La IP desde la que se ejecuta el backend debe estar autorizada en Atlas, en **Network Access**.
+
+#### Producción
+
+- **Render:** en **Environment**, definir `MONGO_URI`. El servicio usa `backend` como Root Directory, `npm install` como Build Command y `npm start` como Start Command. Atlas debe permitir conexiones desde `0.0.0.0/0`, porque Render no tiene una IP fija en el plan gratuito.
+- **Vercel:** en **Settings → Environment Variables**, definir `VITE_API_BASE_URL` con la URL del backend en Render. El proyecto usa `client` como Root Directory. Vite incorpora esta variable al compilar, por lo que después de cambiarla hay que volver a desplegar.
 
 ## Verificación
 
