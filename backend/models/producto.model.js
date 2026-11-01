@@ -50,6 +50,7 @@ const ProductoSchema = new mongoose.Schema(
   },
   {
     timestamps: true, // Agrega createdAt y updatedAt automáticamente
+    toJSON: { virtuals: true },
   },
 );
 

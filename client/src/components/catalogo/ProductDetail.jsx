@@ -1,53 +1,13 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductAdminActions from "./ProductAdminActions.jsx";
 import { getProductoById } from "../../service/productoService.js";
 import formatPrice from "../../utils/formatPrice.js";
 import getProductImage from "../../utils/getProductImage.js";
 
-const nombresEspecificaciones = {
-  medidas: "Medidas",
-  materiales: "Materiales",
-  acabado: "Acabado",
-  rotacion: "Rotación",
-  garantia: "Garantía",
-  peso: "Peso",
-  cargaMaxima: "Carga máxima",
-  capacidad: "Capacidad",
-  modulares: "Modulares",
-  tapizado: "Tapizado",
-  confort: "Confort",
-  almacenamiento: "Almacenamiento",
-  cables: "Gestión de cables",
-  extension: "Extensión",
-  caracteristicas: "Características",
-  regulacion: "Regulación",
-  certificacion: "Certificación",
-  apilables: "Apilables",
-  incluye: "Incluye",
-  estructura: "Estructura",
-  relleno: "Relleno",
-  sostenibilidad: "Sostenibilidad",
-};
-
-const camposProducto = new Set([
-  "id",
-  "nombre",
-  "categoria",
-  "destacado",
-  "precio",
-  "imagen",
-  "image",
-  "imagenUrl",
-  "descripcion",
-  "descripcionLarga",
-  "etiquetas",
-]);
-
 function ProductDetail({ onAddToCart, onProductDeleted }) {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -107,21 +67,29 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
   const productToDisplay = product;
   const name = productToDisplay.name || productToDisplay.nombre;
   const image = getProductImage(productToDisplay);
-  const specifications = Object.entries(productToDisplay).filter(
-    ([key, value]) =>
-      !camposProducto.has(key) && key !== "stock" && value != null && value !== "",
-  );
+  const specifications = [
+    {
+      key: "categoria",
+      label: "Categoría",
+      value: productToDisplay.categoria ?? productToDisplay.category,
+    },
+    { key: "medidas", label: "Medidas", value: productToDisplay.medidas },
+    {
+      key: "materiales",
+      label: "Materiales",
+      value: productToDisplay.materiales,
+    },
+  ].filter((specification) => specification.value != null && specification.value !== "");
 
   return (
     <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 sm:px-8 lg:px-10">
         <nav aria-label="Ubicación actual" className="mx-auto mb-6 max-w-6xl">
-          <button
+          <Link
+            to="/productos"
             className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
-            onClick={() => (window.history.state?.idx > 0 ? navigate(-1) : navigate("/productos"))}
-            type="button"
           >
             <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Volver
-          </button>
+          </Link>
         </nav>
         <div className="mx-auto max-w-6xl border-t border-siena/25 pt-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
@@ -135,9 +103,6 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
               />
             </div>
             <div className="flex min-w-0 flex-col gap-4 py-2">
-              <span className="font-brand-sans text-xs font-semibold uppercase tracking-[0.1em] text-siena">
-                {productToDisplay.category || productToDisplay.categoria}
-              </span>
               <h1 className="font-brand-serif text-3xl uppercase leading-tight tracking-[0.08em] text-siena sm:text-4xl">
                 {name}
               </h1>
@@ -148,18 +113,18 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
               </p>
               <p className="font-brand-sans text-sm text-text">
                 <span className="font-semibold">Stock:</span>{" "}
-                {productToDisplay.stock ?? "No disponible"}
+                <span className="font-bold">
+                  {productToDisplay.stock ?? "No disponible"}
+                </span>
               </p>
               {specifications.length > 0 && (
-                <dl className="mt-2 divide-y divide-siena/15 border-y border-siena/20">
-                  {specifications.map(([key, value]) => (
+                <dl className="mt-2 border-t border-siena/20">
+                  {specifications.map(({ key, label, value }) => (
                     <div
                       key={key}
-                      className="flex flex-wrap justify-between gap-x-4 gap-y-1 py-3 font-brand-sans text-sm"
+                      className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-siena/15 py-3 font-brand-sans text-sm last:border-b-0"
                     >
-                      <dt className="text-text/70">
-                        {nombresEspecificaciones[key] || key}
-                      </dt>
+                      <dt className="text-text/70">{label}</dt>
                       <dd className="text-right font-medium text-text">
                         {String(value)}
                       </dd>
@@ -179,7 +144,7 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
                   ))}
                 </div>
               )}
-              <div className="mt-auto flex w-full flex-wrap items-end justify-between gap-5 border-t border-siena/25 pt-6">
+              <div className="flex w-full flex-wrap items-end justify-between gap-5 pt-2">
                 <div className="flex min-w-fit flex-col">
                   <span className="font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-text/70">
                     Precio
