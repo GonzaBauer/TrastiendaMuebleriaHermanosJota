@@ -38,4 +38,37 @@ async function createContactMessage(req, res, next) {
   }
 }
 
-module.exports = { createContactMessage };
+async function getAllContactMessages(req, res, next) {
+    try {
+        const mensajes = await Contacto.find().sort({ fecha: -1 });
+        return res.status(200).json({
+            ok: true,
+            data: mensajes,
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+async function deleteContactMessage(req, res, next) {
+    try {
+        const { id } = req.params;
+        const mensajeEliminado = await Contacto.findByIdAndDelete(id);
+
+        if (!mensajeEliminado) {
+            const error = new Error("No se encontró el mensaje de contacto especificado.");
+            error.status = 404;
+            return next(error);
+        }
+
+        return res.status(200).json({
+            ok: true,
+            message: "Mensaje eliminado correctamente.",
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+module.exports = { createContactMessage, getAllContactMessages, 
+    deleteContactMessage};
