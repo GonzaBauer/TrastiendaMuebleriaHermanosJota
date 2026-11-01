@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const ContactoSchema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
-      default: Date.now,
-    },
     nombre: {
       type: String,
       required: [true, "El nombre es obligatorio"],

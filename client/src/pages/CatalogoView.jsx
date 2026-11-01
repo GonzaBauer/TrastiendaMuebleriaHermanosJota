@@ -1,4 +1,5 @@
 import ProductList from "../components/ProductList.jsx";
+import { Link } from "react-router-dom";
 
 function CatalogoView({
   products,
@@ -9,7 +10,7 @@ function CatalogoView({
   return (
     <main className="min-w-0 flex-1">
       <section className="bg-alabastro px-page py-section">
-        <header className="mx-auto mb-10 max-w-6xl border-b border-siena/25 px-1 pb-8 sm:pb-10">
+        <header className="mx-auto max-w-6xl border-b border-siena/25 px-1 pb-8 sm:pb-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <p className="mb-3 font-brand-sans text-xs font-semibold uppercase tracking-[0.12em] text-siena">
               Colección atemporal
@@ -23,6 +24,12 @@ function CatalogoView({
               para vivir con calma y belleza a lo largo del tiempo.
             </p>
           </div>
+          <Link
+            to="/admin/crear-producto"
+            className="mt-6 flex min-h-11 w-fit items-center justify-center bg-siena px-4 py-2 font-brand-sans text-sm font-semibold uppercase tracking-wider text-white transition hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
+          >
+            Dar de alta un producto
+          </Link>
         </header>
         <ProductList
           products={products}

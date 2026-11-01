@@ -10,8 +10,8 @@ const contactoRoutes = require("./routes/contactoRoutes");
 const conectarDB = require('./config/db'); 
 require('dotenv').config();
 
-conectarDB();
-
+const iniciarServidor = async () => {
+  await conectarDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(logger);
@@ -30,3 +30,6 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
+};
+
+iniciarServidor();

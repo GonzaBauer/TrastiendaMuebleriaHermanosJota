@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
-import API_BASE_URL from "../../config/api.js";
+import { getProductosDestacados } from "../../service/productoService.js";
 
 function ProductosDestacados({ onProductSelect }) {
   const [productos, setProductos] = useState([]);
@@ -12,16 +12,7 @@ function ProductosDestacados({ onProductSelect }) {
 
     async function loadFeaturedProducts() {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/productos/destacados`,
-          { signal: controller.signal },
-        );
-
-        if (!response.ok) {
-          throw new Error("No se pudieron cargar los productos destacados.");
-        }
-
-        const featuredProducts = await response.json();
+        const featuredProducts = await getProductosDestacados(controller.signal);
         if (!Array.isArray(featuredProducts)) {
           throw new Error("La respuesta de productos destacados no es válida.");
         }
