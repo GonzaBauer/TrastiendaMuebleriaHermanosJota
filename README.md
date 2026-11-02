@@ -85,9 +85,6 @@ Con el backend en `http://localhost:3000`:
 │   │   ├── apiController.js    # Respuesta de estado de la API
 │   │   ├── contactoController.js
 │   │   └── productoController.js
-│   ├── data/
-│   │   └── productos.js        # Datos del catálogo
-│   ├── imagenes/               # Imágenes servidas por Express
 │   ├── middlewares/
 │   │   ├── errorHandler.js     # Respuestas de error
 │   │   ├── logger.js           # Registro de solicitudes
