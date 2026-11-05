@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/useAuth.js";
 import ProductAdminActions from "./ProductAdminActions.jsx";
 import { getProductoById } from "../../service/productoService.js";
 import formatPrice from "../../utils/formatPrice.js";
@@ -8,6 +9,9 @@ import getProductImage from "../../utils/getProductImage.js";
 
 function ProductDetail({ onAddToCart, onProductDeleted }) {
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isAdmin, isCliente } = useAuth();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -154,20 +158,32 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
                     {formatPrice(productToDisplay.precio)}
                   </span>
                 </div>
-                <button
-                  onClick={() => onAddToCart(productToDisplay)}
-                  className="inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-siena px-6 py-3 font-brand-sans text-sm font-medium uppercase tracking-[0.08em] text-alabastro transition-colors hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-vara"
-                  type="button"
-                >
-                  <ShoppingBag aria-hidden="true" className="h-4 w-4" /> Añadir
-                  al carrito
-                </button>
+                {!isAdmin && (
+                  <button
+                    onClick={() =>
+                      isCliente
+                        ? onAddToCart(productToDisplay)
+                        : navigate("/login", {
+                            state: {
+                              from: `${location.pathname}${location.search}${location.hash}`,
+                            },
+                          })
+                    }
+                    className="inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-siena px-6 py-3 font-brand-sans text-sm font-medium uppercase tracking-[0.08em] text-alabastro transition-colors hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-vara"
+                    type="button"
+                  >
+                    <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+                    {isCliente ? "Añadir al carrito" : "Ingresá para agregar"}
+                  </button>
+                )}
               </div>
-              <ProductAdminActions
-                id={productToDisplay.id}
-                name={name}
-                onDeleted={onProductDeleted}
-              />
+              {isAdmin && (
+                <ProductAdminActions
+                  id={productToDisplay.id}
+                  name={name}
+                  onDeleted={onProductDeleted}
+                />
+              )}
             </div>
           </div>
         </div>

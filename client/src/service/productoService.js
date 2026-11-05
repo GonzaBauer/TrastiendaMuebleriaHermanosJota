@@ -36,6 +36,11 @@ const handleResponse = async (res) => {
   return data;
 };
 
+const getAuthHeaders = () => {
+  const token = sessionStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const getProductos = (signal) =>
   fetch(API_URL, { signal }).then(handleResponse);
 
@@ -45,19 +50,22 @@ export const getProductoById = (id, signal) =>
 export const createProducto = (data) =>
   fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
     body: JSON.stringify(data),
   }).then(handleResponse);
 
 export const updateProducto = (id, data) =>
   fetch(`${API_URL}/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
     body: JSON.stringify(data),
   }).then(handleResponse);
 
 export const deleteProducto = (id) =>
-  fetch(`${API_URL}/${id}`, { method: 'DELETE' }).then(handleResponse);
+  fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  }).then(handleResponse);
 
 export const getProductosDestacados = (signal) =>
   fetch(`${API_URL}/destacados`, { signal }).then(handleResponse);

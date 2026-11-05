@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ProductCard from "./ProductCard.jsx";
+import ProductCardWithActions from "./catalogo/ProductCardWithActions.jsx";
 
 function normalizeText(value) {
   return value
@@ -9,7 +9,7 @@ function normalizeText(value) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-function ProductList({ products, loading, error, onProductSelect }) {
+function ProductList({ products, loading, error, onProductSelect, onProductDeleted }) {
   const [busqueda, setBusqueda] = useState("");
   const termino = normalizeText(busqueda);
   const productosFiltrados = products.filter((producto) =>
@@ -17,27 +17,31 @@ function ProductList({ products, loading, error, onProductSelect }) {
   );
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <label className="block w-full min-w-0 flex-1">
-          <span className="mb-2 block font-brand-sans text-sm font-medium text-text">
-            Buscar en el catálogo
-          </span>
+    <div className="mx-auto w-full max-w-6xl">
+      <div className="mb-6 min-w-0 border-b border-siena/25 pb-8">
+        <label
+          htmlFor="catalog-search"
+          className="mb-2 block text-center font-brand-sans text-sm font-medium text-text"
+        >
+          Buscar en el catálogo
+        </label>
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <input
+            id="catalog-search"
             className="min-h-12 w-full rounded-sm border border-siena/35 bg-white/70 px-4 font-brand-sans text-sm text-text outline-none transition focus:border-siena focus:ring-2 focus:ring-vara/40"
             type="search"
             value={busqueda}
             onChange={(event) => setBusqueda(event.target.value)}
             placeholder="Buscá tu próxima pieza favorita"
           />
-        </label>
-        <p
-          className="shrink-0 self-end whitespace-nowrap text-right font-brand-sans text-sm font-semibold uppercase tracking-[0.08em] text-siena sm:self-auto"
-          aria-live="polite"
-        >
-          {productosFiltrados.length}{" "}
-          {productosFiltrados.length === 1 ? "pieza" : "piezas"}
-        </p>
+          <p
+            className="shrink-0 self-end whitespace-nowrap text-right font-brand-sans text-sm font-semibold uppercase tracking-[0.08em] text-siena sm:self-auto"
+            aria-live="polite"
+          >
+            {productosFiltrados.length}{" "}
+            {productosFiltrados.length === 1 ? "pieza" : "piezas"}
+          </p>
+        </div>
       </div>
 
       {loading ? (
@@ -64,12 +68,13 @@ function ProductList({ products, loading, error, onProductSelect }) {
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {productosFiltrados.map((producto) => (
-            <ProductCard
+            <ProductCardWithActions
               key={producto.id}
               producto={producto}
               showDescription
               showFeatured
               onSelect={onProductSelect}
+              onProductDeleted={onProductDeleted}
             />
           ))}
         </div>

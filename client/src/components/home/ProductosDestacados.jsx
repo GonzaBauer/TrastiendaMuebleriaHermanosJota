@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../ProductCard";
+import ProductCardWithActions from "../catalogo/ProductCardWithActions.jsx";
 import { getProductosDestacados } from "../../service/productoService.js";
 
-function ProductosDestacados({ onProductSelect }) {
+function ProductosDestacados({ onProductSelect, productsVersion, onProductDeleted }) {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,7 +37,7 @@ function ProductosDestacados({ onProductSelect }) {
 
     loadFeaturedProducts();
     return () => controller.abort();
-  }, []);
+  }, [productsVersion]);
 
   if (loading) {
     return (
@@ -73,10 +73,11 @@ function ProductosDestacados({ onProductSelect }) {
       </div>
       <div className="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {productos.map((producto) => (
-          <ProductCard
+          <ProductCardWithActions
             producto={producto}
             key={producto.id}
             onSelect={onProductSelect}
+            onProductDeleted={onProductDeleted}
           />
         ))}
       </div>

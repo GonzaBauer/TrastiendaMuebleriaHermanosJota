@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import LoginView from './pages/LoginView.jsx'
+import RegisterView from './pages/RegisterView.jsx'
+import AdminHomeView from './pages/AdminHomeView.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 import HomeView from './pages/HomeView.jsx'
 import CatalogoView from './pages/CatalogoView.jsx'
 import ProductDetail from './components/catalogo/ProductDetail.jsx'
@@ -105,13 +109,23 @@ function App() {
 
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
-  const home = <HomeView onProductSelect={selectProduct} />;
+  const home = (
+    <HomeView
+      onProductSelect={selectProduct}
+      productsVersion={productsVersion}
+      onProductDeleted={refreshProducts}
+    />
+  );
+  const isAuthPage = pathname === "/login" || pathname === "/registro";
 
   return (
     <div className="flex min-h-[100svh] w-full min-w-0 flex-col">
-      <Navbar cartCount={cartCount} />
+      {!isAuthPage && <Navbar cartCount={cartCount} />}
       <Routes>
         <Route path="/" element={home} />
+        <Route path="/inicio" element={<Navigate to="/" replace />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/registro" element={<RegisterView />} />
         <Route
           path="/productos"
           element={
@@ -120,6 +134,7 @@ function App() {
               loading={loading}
               error={error}
               onProductSelect={selectProduct}
+              onProductDeleted={refreshProducts}
             />
           }
         />
@@ -135,26 +150,44 @@ function App() {
         <Route
           path="/carrito"
           element={
-            <CarritoView
-              cart={cart}
-              onChangeQuantity={changeQuantity}
-              onRemove={removeFromCart}
-              onClear={clearCart}
-            />
+            <ProtectedRoute allowedRoles={["cliente"]}>
+              <CarritoView
+                cart={cart}
+                onChangeQuantity={changeQuantity}
+                onRemove={removeFromCart}
+                onClear={clearCart}
+              />
+            </ProtectedRoute>
           }
         />
         <Route path="/contacto" element={<ContactForm />} />
         <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminHomeView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/crear-producto"
-          element={<CrearProductoView onProductSaved={refreshProducts} />}
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <CrearProductoView onProductSaved={refreshProducts} />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin/editar-producto/:id"
-          element={<EditarProductoView onProductSaved={refreshProducts} />}
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <EditarProductoView onProductSaved={refreshProducts} />
+            </ProtectedRoute>
+          }
         />
-        <Route path="*" element={home} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer />
+      {!isAuthPage && <Footer />}
     </div>
   );
 }

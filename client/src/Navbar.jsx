@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react'
-import { Menu, ShoppingBag, X } from 'lucide-react'
+import { LogIn, Menu, ShoppingBag, X } from 'lucide-react'
+import { useAuth } from "./context/useAuth.js";
 
 const navigationLinks = [
   { label: 'Inicio', href: '/' },
@@ -10,6 +11,8 @@ const navigationLinks = [
 
 function Navbar({ cartCount = 0 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAdmin, isCliente, isAuthenticated, logout } = useAuth();
 
   function closeMenu() {
     setMenuOpen(false);
@@ -46,18 +49,50 @@ function Navbar({ cartCount = 0 }) {
             </span>
           </Link>
         ))}
+        {isAdmin && (
+          <Link
+            to="/admin"
+            onClick={closeMenu}
+            className="group relative flex min-h-[44px] transform items-center p-1 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline transition-all cursor-pointer"
+          >
+            <span className="relative inline-block">Administración</span>
+          </Link>
+        )}
       </nav>
 
-      <Link
-        className="relative ml-auto mr-3 flex h-[44px] shrink-0 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6 md:mr-0"
-        to="/carrito"
-        aria-label={`Carrito, ${cartCount} productos`}
-      >
-        <ShoppingBag aria-hidden="true" className="h-5 w-5" />
-        <span className="min-w-[1.25rem] rounded-full bg-siena px-1.5 py-0.5 text-center text-[10px] font-bold text-alabastro">
-          {cartCount}
-        </span>
-      </Link>
+      {isCliente && (
+        <Link
+          className="relative ml-auto mr-3 flex h-[44px] shrink-0 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6 md:mr-0"
+          to="/carrito"
+          aria-label={`Carrito, ${cartCount} productos`}
+        >
+          <ShoppingBag aria-hidden="true" className="h-5 w-5" />
+          <span className="min-w-[1.25rem] rounded-full bg-siena px-1.5 py-0.5 text-center text-[10px] font-bold text-alabastro">
+            {cartCount}
+          </span>
+        </Link>
+      )}
+
+      {isAuthenticated ? (
+        <button
+          className="ml-auto inline-flex min-h-[44px] items-center px-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6"
+          type="button"
+          onClick={() => {
+            logout();
+            navigate("/");
+          }}
+        >
+          Salir
+        </button>
+      ) : (
+        <Link
+          className="ml-auto inline-flex min-h-[44px] items-center gap-2 px-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6"
+          to="/login"
+        >
+          Ingresar
+          <LogIn aria-hidden="true" className="h-4 w-4" />
+        </Link>
+      )}
 
       <button
         className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-sm border border-siena/35 bg-transparent p-0 text-siena focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-siena md:hidden"
