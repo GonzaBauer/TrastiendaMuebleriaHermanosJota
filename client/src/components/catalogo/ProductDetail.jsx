@@ -87,13 +87,21 @@ function ProductDetail({ onAddToCart, onProductDeleted }) {
 
   return (
     <main className="min-w-0 flex-1 bg-alabastro px-5 py-8 sm:px-8 lg:px-10">
-        <nav aria-label="Ubicación actual" className="mx-auto mb-6 max-w-6xl">
+        <nav aria-label="Ubicación actual" className="mx-auto mb-6 flex max-w-6xl flex-wrap gap-4">
           <Link
             to="/productos"
             className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
           >
             <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Volver
           </Link>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="inline-flex min-h-11 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-[0.08em] text-siena hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
+            >
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Volver
+            </Link>
+          )}
         </nav>
         <div className="mx-auto max-w-6xl border-t border-siena/25 pt-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">

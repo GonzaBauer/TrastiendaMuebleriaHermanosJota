@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import ProductList from "../components/ProductList.jsx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth.js";
@@ -28,12 +29,21 @@ function CatalogoView({
             </p>
           </div>
           {isAdmin && (
-            <Link
-              to="/admin/crear-producto"
-              className="mt-6 flex min-h-11 w-fit items-center justify-center bg-siena px-4 py-2 font-brand-sans text-sm font-semibold uppercase tracking-wider text-white transition hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
-            >
-              Agregar producto
-            </Link>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/admin"
+                className="flex min-h-11 w-fit items-center justify-center gap-2 border border-siena/35 px-4 py-2 font-brand-sans text-sm font-semibold uppercase tracking-wider text-siena no-underline transition hover:bg-siena/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
+              >
+                <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+                Volver
+              </Link>
+              <Link
+                to="/admin/crear-producto"
+                className="flex min-h-11 w-fit items-center justify-center bg-siena px-4 py-2 font-brand-sans text-sm font-semibold uppercase tracking-wider text-white transition hover:bg-siena/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-siena"
+              >
+                Agregar producto
+              </Link>
+            </div>
           )}
         </header>
         <ProductList

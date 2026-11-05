@@ -12,10 +12,35 @@ const navigationLinks = [
 function Navbar({ cartCount = 0 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { isAdmin, isCliente, isAuthenticated, logout } = useAuth();
+  const { isAdmin, isCliente, isAuthenticated, loading, logout } = useAuth();
 
   function closeMenu() {
     setMenuOpen(false);
+  }
+
+  if (loading) return null;
+
+  if (isAdmin) {
+    return (
+      <header className="sticky top-0 z-50 flex w-full min-w-0 items-center justify-between border-b border-[rgba(160,82,45,0.2)] bg-alabastro px-4 py-1.5 md:px-6 md:py-2">
+        <Link
+          className="h-10 w-10 shrink-0 no-underline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-siena md:h-12 md:w-12"
+          to="/admin"
+        >
+          <img className="h-full w-full object-contain" src="/images/logo.svg" alt="Hermanos Jota" />
+        </Link>
+        <button
+          className="ml-auto inline-flex min-h-[44px] items-center gap-1 px-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-0 md:px-0"
+          type="button"
+          onClick={() => {
+            logout();
+            navigate("/");
+          }}
+        >
+          Cerrar sesión
+        </button>
+      </header>
+    );
   }
 
   return (
@@ -62,7 +87,7 @@ function Navbar({ cartCount = 0 }) {
 
       {isCliente && (
         <Link
-          className="relative ml-auto mr-3 flex h-[44px] shrink-0 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6 md:mr-0"
+          className="relative ml-auto mr-3 flex h-[44px] shrink-0 items-center gap-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text no-underline hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-auto md:mr-0"
           to="/carrito"
           aria-label={`Carrito, ${cartCount} productos`}
         >
@@ -73,16 +98,22 @@ function Navbar({ cartCount = 0 }) {
         </Link>
       )}
 
+      {isCliente && isAuthenticated && (
+        <span aria-hidden="true" className="mx-2 text-siena">
+          |
+        </span>
+      )}
+
       {isAuthenticated ? (
         <button
-          className="ml-auto inline-flex min-h-[44px] items-center px-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-6"
+          className="ml-auto inline-flex min-h-[44px] items-center gap-1 px-2 font-brand-sans text-xs font-medium uppercase tracking-wider text-text hover:text-siena focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena md:ml-0 md:px-0"
           type="button"
           onClick={() => {
             logout();
             navigate("/");
           }}
         >
-          Salir
+          Cerrar sesión
         </button>
       ) : (
         <Link
