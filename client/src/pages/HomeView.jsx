@@ -1,11 +1,15 @@
 import Hero from "../components/home/Hero.jsx";
 import ProductosDestacados from "../components/home/ProductosDestacados.jsx";
 
-function HomeView({ onProductSelect }) {
+function HomeView({ onProductSelect, productsVersion, onProductDeleted }) {
   return (
     <main className="min-w-0 flex-1">
       <Hero imageUrl="/images/imagen-hero-banner.png" />
-      <ProductosDestacados onProductSelect={onProductSelect} />
+      <ProductosDestacados
+        onProductSelect={onProductSelect}
+        productsVersion={productsVersion}
+        onProductDeleted={onProductDeleted}
+      />
     </main>
   );
 }

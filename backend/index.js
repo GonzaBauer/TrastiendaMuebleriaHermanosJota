@@ -7,6 +7,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const apiController = require("./controllers/apiController");
 const productoRoutes = require("./routes/productoRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
+const authRoutes = require("./routes/authRoutes");
 const conectarDB = require('./config/db'); 
 require('dotenv').config();
 
@@ -21,6 +22,7 @@ app.use("/imagenes", express.static(path.join(__dirname, "imagenes")));
 
 app.use("/api/productos", productoRoutes);
 app.use("/api/contacto", contactoRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", apiController.getApiInfo);
 

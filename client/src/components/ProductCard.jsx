@@ -17,7 +17,7 @@ function ProductCard({
       type="button"
       onClick={() => onSelect(producto)}
       aria-label={`Ver detalle de ${name}`}
-      className="group flex min-w-0 flex-col overflow-hidden rounded-card border border-siena/20 bg-white/50 text-left shadow-surface transition-colors duration-200 hover:border-siena/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena"
+      className="group flex h-full w-full min-w-0 flex-col overflow-hidden rounded-card border border-siena/20 bg-white/50 text-left shadow-surface transition-colors duration-200 hover:border-siena/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-siena"
     >
       <div className="flex aspect-[4/3] w-full shrink-0 items-center justify-center overflow-hidden bg-alabastro p-4">
         <img
