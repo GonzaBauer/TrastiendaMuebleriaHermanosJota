@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-
 import LoginView from './pages/LoginView.jsx'
 import RegisterView from './pages/RegisterView.jsx'
 import AdminHomeView from './pages/AdminHomeView.jsx'
+import NotFoundView from './pages/NotFoundView.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import HomeView from './pages/HomeView.jsx'
 import CatalogoView from './pages/CatalogoView.jsx'
@@ -185,7 +186,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundView />} />
       </Routes>
       {!isAuthPage && <Footer />}
     </div>

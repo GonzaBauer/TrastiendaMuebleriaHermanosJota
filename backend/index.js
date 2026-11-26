@@ -15,6 +15,8 @@ const iniciarServidor = async () => {
   await conectarDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Render pone un proxy delante: sin esto, req.ip sería la IP del proxy para todos.
+app.set("trust proxy", 1);
 app.use(logger);
 app.use(cors());
 app.use(express.json());
