@@ -29,6 +29,10 @@ const ProductoSchema = new mongoose.Schema(
     stock: {
       type: Number,
       min: [0, "El stock no puede ser negativo"],
+      validate: {
+        validator: Number.isInteger,
+        message: "El stock debe ser un número entero",
+      },
     },
     precio: {
       type: Number,
