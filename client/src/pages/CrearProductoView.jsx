@@ -9,7 +9,7 @@ function CrearProductoView({ onProductSaved }) {
   async function handleCreate(producto) {
     await createProducto(producto);
     onProductSaved();
-    navigate("/productos");
+    navigate("/productos", { replace: true });
   }
 
   return (

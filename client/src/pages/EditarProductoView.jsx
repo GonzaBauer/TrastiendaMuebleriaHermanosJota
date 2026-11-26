@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../components/admin/AdminLayout.jsx";
 import ProductForm from "../components/admin/ProductForm.jsx";
 import { getProductoById, updateProducto } from "../service/productoService.js";
+import goBack from "../utils/goBack.js";
 
 function EditarProductoView({ onProductSaved }) {
   const { id } = useParams();
@@ -41,7 +42,8 @@ function EditarProductoView({ onProductSaved }) {
   async function handleUpdate(producto) {
     await updateProducto(id, producto);
     onProductSaved();
-    navigate(`/productos/${id}`);
+    // Vuelve a donde estaba el admin (detalle o catálogo) para no dejar el formulario en el historial.
+    goBack(navigate, `/productos/${id}`);
   }
 
   return (
